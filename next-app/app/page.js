@@ -27,27 +27,27 @@ export default function Home() {
           <div style={styles.box} className="m-8">p</div>
           <div className="p-8 gap-8 flex flex-wrap">
             <div style={styles.box} className="w-64 h-48">
-              <div className="w-full h-28 flex justify-center">
-                <img src="masource" className="bg-blue-50 "></img>
-              </div>
+              <a href="https://www.github.com" target="_blank" className="w-full h-28 flex justify-center">
+                <img src="/socials/github.png"></img>
+              </a>
               <p className="p-3 overflow-auto">GitHub</p>
             </div>
             <div style={styles.box} className="w-64 h-48">
-              <div className="w-full h-28 flex justify-center">
-                <img src="masource" className="bg-blue-50 "></img>
-              </div>
+              <a href="https://www.linkedin.com" target="_blank" className="w-full h-28 flex justify-center">
+                <img src="/socials/linkedin.png" ></img>
+              </a>
               <p className="p-3 overflow-auto">Linkedin</p>
             </div>
             <div style={styles.box} className="w-64 h-48">
-              <div className="w-full h-28 flex justify-center">
-                <img src="masource" className="bg-blue-50 "></img>
-              </div>
+              <a href="https://www.dev.to" target="_blank" className="w-full h-28 flex justify-center">
+                <img src="/socials/dev.png"></img>
+              </a>
               <p className="p-3 overflow-auto">Dev</p>
             </div>
             <div style={styles.box} className="w-64 h-48">
-              <div className="w-full h-28 flex justify-center">
-                <img src="masource" className="bg-blue-50 "></img>
-              </div>
+              <a href="https://www.reddit.com" target="_blank" className="w-full h-28 flex justify-center">
+                <img src="/socials/reddit.png"></img>
+              </a>
               <p className="p-3 overflow-auto">Reddit</p>
             </div>
           </div>
