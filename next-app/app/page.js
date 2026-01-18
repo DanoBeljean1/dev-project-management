@@ -1,7 +1,60 @@
 import Image from "next/image";
+import BaseLayout from "./main";
+
 
 export default function Home() {
+
+  const styles = {
+    box: {
+      backgroundColor: "white",
+      borderRadius: "10px",
+      padding: "10px",
+      border: "1px solid gray"
+    }
+  }
+
   return (
+
+    <div>
+      
+
+      <BaseLayout>
+        <div className="">
+          <div className="flex p-8 gap-8">
+            <div style={styles.box} className="basis-1/3">Tracker d'activités</div>
+            <div style={styles.box} className="basis-2/3">Activités récentes</div>
+          </div>
+          <div style={styles.box} className="m-8">p</div>
+          <div className="p-8 gap-8 flex flex-wrap">
+            <div style={styles.box} className="w-64 h-48">
+              <div className="w-full h-28 flex justify-center">
+                <img src="masource" className="bg-blue-50 "></img>
+              </div>
+              <p className="p-3 overflow-auto">GitHub</p>
+            </div>
+            <div style={styles.box} className="w-64 h-48">
+              <div className="w-full h-28 flex justify-center">
+                <img src="masource" className="bg-blue-50 "></img>
+              </div>
+              <p className="p-3 overflow-auto">Linkedin</p>
+            </div>
+            <div style={styles.box} className="w-64 h-48">
+              <div className="w-full h-28 flex justify-center">
+                <img src="masource" className="bg-blue-50 "></img>
+              </div>
+              <p className="p-3 overflow-auto">Dev</p>
+            </div>
+            <div style={styles.box} className="w-64 h-48">
+              <div className="w-full h-28 flex justify-center">
+                <img src="masource" className="bg-blue-50 "></img>
+              </div>
+              <p className="p-3 overflow-auto">Reddit</p>
+            </div>
+          </div>
+        </div>
+      </BaseLayout>
+    </div>
+    /*
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
         <Image
@@ -60,6 +113,6 @@ export default function Home() {
           </a>
         </div>
       </main>
-    </div>
+    </div>*/
   );
 }
