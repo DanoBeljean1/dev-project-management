@@ -26,11 +26,11 @@ export function CurrentPath() {
 
 function Route () {
 
-    const [currentLoc, setCurrentLoc] = useState('dashboard')
+    const [currentLoc, setCurrentLoc] = useState('')
     const pathname = usePathname()
 
     const navigation = (loc) => ({
-        backgroundColor: pathname.endsWith(loc) && "rgb(223, 229, 237",
+        backgroundColor: pathname.endsWith(loc) | pathname.endsWith("0") && "rgb(223, 229, 237)",
         padding: "10px",
         paddingLeft: "30px",
         borderRadius: "10px"
@@ -38,7 +38,7 @@ function Route () {
 
     return (
         <div className="flex flex-col text-xl gap-1">
-            <Link style={navigation("/")} onClick={() => setCurrentLoc("dashboard")} href="/">Dashboard</Link>
+            <Link style={navigation("/")} onClick={() => setCurrentLoc("/")} href="/">Dashboard</Link>
             <Link style={navigation("technologies")} onClick={() => setCurrentLoc("technologies")} href="/routes/technologies">Technologies</Link>
             <Link style={navigation("project")} onClick={() => setCurrentLoc("project")} href="/routes/project">All Projects</Link>
             <Link style={navigation("execute")} onClick={() => setCurrentLoc("execute")} href="/routes/execute">Execute</Link>
