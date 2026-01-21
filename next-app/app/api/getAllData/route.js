@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
+import { ObjectId } from "mongodb";
 
 export async function GET() {
   const client = new MongoClient(process.env.MONGODB_URI);
@@ -8,9 +9,13 @@ export async function GET() {
     await client.connect();
 
     const database = client.db("sample_mflix");
-    const collection = database.collection("comments");
+    const collection = database.collection("projects");
 
-    const allData = await collection.find({}).toArray();
+
+    const allData = await collection
+    .find({ user: "dano" })
+    .toArray();
+
 
     return NextResponse.json(allData, { status: 200 });
   } catch (error) {

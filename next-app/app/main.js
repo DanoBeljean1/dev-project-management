@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown, faArrowTurnDown, faAngleRight, faArrowsTurnRight } from "@fortawesome/free-solid-svg-icons";
 
 
 
@@ -28,6 +30,21 @@ function Route () {
 
     const [currentLoc, setCurrentLoc] = useState('')
     const pathname = usePathname()
+    const [allData, setAllData] = useState([])
+
+    const fetchData = async () => {
+        const response = await fetch("/api/getAllData");
+
+        if (response.ok) {
+            const data = await response.json()
+            const names = Object.keys(data[0].projects);
+            setAllData(names);
+
+        }
+        else {
+            console.log("Error while fetching data.")
+        }
+    }
 
     const navigation = (loc) => ({
         backgroundColor: pathname.endsWith(loc) | pathname.endsWith("0") && "rgb(223, 229, 237)",
@@ -38,9 +55,18 @@ function Route () {
 
     return (
         <div className="flex flex-col text-xl gap-1">
-            <Link style={navigation("/")} onClick={() => setCurrentLoc("/")} href="/">Dashboard</Link>
+            <Link style={navigation("/")} onClick={() => setCurrentLoc("/")} href="/">Dashboards</Link>
             <Link style={navigation("technologies")} onClick={() => setCurrentLoc("technologies")} href="/routes/technologies">Technologies</Link>
-            <Link style={navigation("project")} onClick={() => setCurrentLoc("project")} href="/routes/project">All Projects</Link>
+            <Link style={navigation("project")} className="w-64" onClick={() => {setCurrentLoc("project"); fetchData()}} href="/routes/project"><div className="flex justify-between">All Projects<div className="flex flex-col justify-center"><FontAwesomeIcon icon={(allData.length == 0) ? faAngleRight : faAngleDown} style={{color: "grey"}}></FontAwesomeIcon></div></div></Link>
+            <div style={{paddingLeft: "30px"}}>
+                {allData.map((name) => (
+                    <div key={name} className="flex items-center gap-4">
+                    <FontAwesomeIcon className="p-auto" style={{transform: "scaleX(-1) rotate(90deg)", color: "gray"}} icon={faArrowTurnDown}></FontAwesomeIcon>
+                        <p>{name}</p>
+                        </div>
+                    ))}
+            </div>
+            
             <Link style={navigation("execute")} onClick={() => setCurrentLoc("execute")} href="/routes/execute">Execute</Link>
         </div>
     )
