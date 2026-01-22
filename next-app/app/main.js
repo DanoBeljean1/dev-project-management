@@ -5,7 +5,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faArrowTurnDown, faAngleRight, faArrowsTurnRight } from "@fortawesome/free-solid-svg-icons";
-
+import {capitalize} from "src/capitalize"
 
 
 /*
@@ -72,6 +72,25 @@ function Route () {
     )
 }
 
+function TopPanelAction () {
+    const pathname = usePathname().split("/")
+
+    if (pathname[pathname.length -2] == "project") {
+        return (
+            <div className="flex gap-5">
+                <button className="p-3 bg-white rounded-xl border-2 border-blue-200 text-blue-300 cursor-pointer hover:bg-blue-300 hover:text-white">Roadmap du projet</button>
+                    <div className="bg-blue-200 rounded-xl text-white flex justify-between overflow-hidden">
+                        <button onClick={() => console.log("add")} className="p-3 cursor-pointer hover:bg-blue-300">Ajouter étape</button>
+                        <div className=" border-l-2 opacity-75"></div>
+                        <button onClick={() => console.log("drop down")} className="cursor-grab hover:bg-blue-300">
+                            <FontAwesomeIcon className="p-3" icon={faAngleDown}></FontAwesomeIcon>
+                        </button>
+                    </div>
+            </div>
+        )
+    }
+}
+
 function LeftPanel () {
     return (
         <div className="p-6 bg-slate-50">
@@ -84,9 +103,9 @@ function TopPanel () {
     const pathname = usePathname().split("/")
     return (
         <div className="flex-1">
-            <div className="bg-slate-100 flex justify-between">
-                <p className="text-4xl p-4">{pathname[pathname.length - 1]}</p>
-                {(pathname[pathname.length - 1] == "projects") ? "salut" : "hello"}
+            <div className="bg-slate-100 flex justify-between items-center p-4">
+                <p className="text-4xl">{capitalize(pathname[pathname.length - 1].replace("_", " "))}</p>
+                <TopPanelAction></TopPanelAction>
             </div>
             <CurrentPath className="pl-4" />
         </div>
