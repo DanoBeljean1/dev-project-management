@@ -60,10 +60,10 @@ function Route () {
             <Link style={navigation("project")} className="w-64" onClick={() => {setCurrentLoc("project"); fetchData()}} href="/routes/project"><div className="flex justify-between">All Projects<div className="flex flex-col justify-center"><FontAwesomeIcon icon={(allData.length == 0) ? faAngleRight : faAngleDown} style={{color: "grey"}}></FontAwesomeIcon></div></div></Link>
             <div style={{paddingLeft: "30px"}}>
                 {allData.map((name) => (
-                    <div key={name} className="flex items-center gap-4">
+                    <a href={"project/"+name} key={name} className="flex items-center gap-4">
                     <FontAwesomeIcon className="p-auto" style={{transform: "scaleX(-1) rotate(90deg)", color: "gray"}} icon={faArrowTurnDown}></FontAwesomeIcon>
                         <p>{name}</p>
-                        </div>
+                        </a>
                     ))}
             </div>
             
@@ -81,10 +81,12 @@ function LeftPanel () {
 }
 
 function TopPanel () {
+    const pathname = usePathname().split("/")
     return (
         <div className="flex-1">
-            <div className="bg-slate-100">
-                <p className="text-4xl p-4">Title</p>
+            <div className="bg-slate-100 flex justify-between">
+                <p className="text-4xl p-4">{pathname[pathname.length - 1]}</p>
+                {(pathname[pathname.length - 1] == "projects") ? "salut" : "hello"}
             </div>
             <CurrentPath className="pl-4" />
         </div>
