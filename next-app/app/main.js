@@ -71,16 +71,24 @@ function Route () {
         </div>
     )
 }
-
-function TopPanelAction () {
+ 
+function TopPanelAction ( {projectData, setProjectData} ) {
     const pathname = usePathname().split("/")
+
 
     if (pathname[pathname.length -2] == "project") {
         return (
             <div className="flex gap-5 ">
                 <button className="p-3 bg-white rounded-xl border-2 border-blue-200 text-blue-300 cursor-pointer hover:bg-blue-300 hover:text-white">Roadmap du projet</button>
                     <div className="bg-blue-200 rounded-xl text-white flex justify-between overflow-hidden">
-                        <button onClick={() => console.log("add")} className="p-3 cursor-pointer hover:bg-blue-300">Ajouter étape</button>
+                        <button onClick={() => {
+                            let x = {"title":"new", "description":"new", "date":"2027-01-02", "status":0}
+                            setProjectData(prev => ([
+  ...prev,
+  {"title":"new", "description":"new", "date":"2027-01-02", "status":0}
+]));
+
+                }} className="p-3 cursor-pointer hover:bg-blue-300">Ajouter étape</button>
                         <div className=" border-l-2 opacity-75"></div>
                         <button onClick={() => console.log("drop down")} className="cursor-grab hover:bg-blue-300">
                             <FontAwesomeIcon className="p-3" icon={faAngleDown}></FontAwesomeIcon>
@@ -99,7 +107,7 @@ function LeftPanel ( {open} ) {
     )
 }
 
-function TopPanel ( {sideBarOpen, setSideBarOpen}) {
+function TopPanel ( {sideBarOpen, setSideBarOpen, projectData, setProjectData} ) {
     const pathname = usePathname().split("/")
     return (
         <div className="flex-1">
@@ -110,23 +118,24 @@ function TopPanel ( {sideBarOpen, setSideBarOpen}) {
                     <p className="text-4xl">{capitalize(pathname[pathname.length - 1].replace("_", " "))}</p>
                 </div>
                 
-                <TopPanelAction></TopPanelAction>
+                <TopPanelAction projectData={projectData} setProjectData={setProjectData}></TopPanelAction>
             </div>
             <CurrentPath />
         </div>
     )
 }
 
-export default function BaseLayout ( {children} ) {
+export default function BaseLayout ( {children, projectData, setProjectData} ) {
 
     const [sideBarOpen, setSideBarOpen] = useState(true)
+    
 
     return (
         <div className="flex h-screen">
             
             <LeftPanel className="h-full" open={sideBarOpen}/>
             <div className="flex flex-col w-full" style={{boxShadow: "inset 8px 0 10px -5px rgba(0, 0, 0, 0.2)"}}>
-                <TopPanel sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} />
+                <TopPanel sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} projectData={projectData} setProjectData={setProjectData} />
                 <div className="h-full bg-slate-200 " style={{boxShadow: "inset 8px 0 10px -5px rgba(0, 0, 0, 0.2)"}}>
                     {children}
                 </div>

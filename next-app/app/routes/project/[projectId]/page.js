@@ -15,7 +15,29 @@ export default function ProjectDetails () {
     const projectId = useParams().projectId
 
     const [allData, setAllData] = useState([])
-    const [projectData, setProjectData] = useState([])
+    const [tempData, setTempData] = useState('')
+    const [projectData, setProjectData] = useState([{"chargement":"..."}])
+    const [editing, setEditing] = useState({
+        "title":0,
+        "description":0
+    })
+
+    const editingTitle = (tile) => ({
+        "title":tile+1,
+        "description":0
+    })
+
+    const editingDescription = (tile) => ({
+        "title":0,
+        "description":tile+1
+    })
+
+    const defaultEditing = () => ({
+        "title":0,
+        "description":0
+    })
+
+
     
         const fetchData = async () => {
             const response = await fetch("/api/getAllData");
@@ -29,20 +51,21 @@ export default function ProjectDetails () {
 
                 setAllData(names);
                 setProjectData(data[0].projects[projectId].lifepath)
-    
+                console.log("projectdata, ", data[0].projects[projectId].lifepath)
+                  
             }
             else {
                 console.log("Error while fetching data.")
             }
         }
 
-    useEffect(() => {
+        useEffect(() => {
         fetchData()
     }, [])
 
 
     return (<div>
-        <BaseLayout>
+        <BaseLayout projectData={projectData} setProjectData={setProjectData}>
                 <div className="flex relative h-full">
                     <div className="basis-1/2 p-8">
                         {projectData.map((name, index) => (
@@ -60,8 +83,35 @@ export default function ProjectDetails () {
                                 </div>
                                 <div className="bg-slate-50 w-full border border-slate-400 p-4 rounded-lg">
                                     
-                                    <div className="flex justify-between"><p className="font-semibold">{name.title}</p><div style={{backgroundColor: (name.status) ? "#b3eebf" : "#9eb4d7", color: (name.status) ? "#4f9f60" : ""}} className="text-xs p-1 h-min px-4 border border-slate-500 rounded-lg">{(name.status) ? "Terminé" : "Actuel"}</div></div>
-                                    <p>{name.description}</p>
+                                    <div className="flex justify-between">
+                                        {(editing.title == (index + 1)) ? <input type="text" className="border border-slate-400 border-2 bg-white rounded-lg p-1 px-2" autoFocus={true} aria-selected value={tempData} onChange={e => setTempData(e.target.value)} onKeyDown={e => {
+                                            switch (e.key) {
+                                                case "Enter":
+                                                    setEditing(defaultEditing)
+                                                    break;
+                                                case "Tab":
+                                                    setEditing(editingDescription(index))
+                                                    setTempData(name.description)
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }}></input> : <p onClick={() => {setEditing(editingTitle(index)); setTempData(name.title)}} className="font-semibold">{name.title}</p>}
+                                        
+                                        <div style={{backgroundColor: (name.status) ? "#b3eebf" : "#9eb4d7", color: (name.status) ? "#4f9f60" : ""}} className="text-xs p-1 h-min px-4 border border-slate-500 rounded-lg">{(name.status) ? "Terminé" : "Actuel"}</div></div>
+                                    {(editing.description == (index + 1)) ? <textarea type="text" className="w-full border border-slate-400 border-2 bg-white rounded-lg p-1 px-2" autoFocus={true} aria-selected value={tempData} onChange={e => setTempData(e.target.value)} onKeyDown={e => {
+                                            switch (e.key) {
+                                                case "Enter":
+                                                    setEditing(defaultEditing)
+                                                    break;
+                                                case "Tab":
+                                                    setEditing(editingTitle(((index+1)%projectData.length)))
+                                                    setTempData(name.description)
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }}></textarea> : <p onClick={() => {setEditing(editingDescription(index)); setTempData(name.description)}}>{name.description}</p>}
                                     <div className="flex items-center gap-2 pt-4">
                                         <FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon>
                                         <p className="">{(new Date(name.date)).toDateString()}</p>
