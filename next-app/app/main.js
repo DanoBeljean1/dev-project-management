@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faArrowTurnDown, faAngleRight, faArrowsTurnRight } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faArrowTurnDown, faAngleRight, faWindowMinimize, faWindowMaximize } from "@fortawesome/free-solid-svg-icons";
 import {capitalize} from "src/capitalize"
 
 
@@ -22,7 +22,7 @@ export function CurrentPath() {
     }
 
     return (
-        <div>{pathname.map((segment, index) => (<a style={styles} href={pathname.slice(0, index+1).join("/")} key={index}>{segment}/</a>))}</div>
+        <div className="pl-4 bg-white">{pathname.map((segment, index) => (<a style={styles} href={pathname.slice(0, index+1).join("/")} key={index}>{segment}/</a>))}</div>
     )
 }
 
@@ -54,7 +54,7 @@ function Route () {
     })
 
     return (
-        <div className="flex flex-col text-xl gap-1">
+        <div className="flex flex-col text-xl gap-1 " >
             <Link style={navigation("/")} onClick={() => setCurrentLoc("/")} href="/">Dashboards</Link>
             <Link style={navigation("technologies")} onClick={() => setCurrentLoc("technologies")} href="/routes/technologies">Technologies</Link>
             <Link style={navigation("project")} className="w-64" onClick={() => {setCurrentLoc("project"); fetchData()}} href="/routes/project"><div className="flex justify-between">All Projects<div className="flex flex-col justify-center"><FontAwesomeIcon icon={(allData.length == 0) ? faAngleRight : faAngleDown} style={{color: "grey"}}></FontAwesomeIcon></div></div></Link>
@@ -77,7 +77,7 @@ function TopPanelAction () {
 
     if (pathname[pathname.length -2] == "project") {
         return (
-            <div className="flex gap-5">
+            <div className="flex gap-5 ">
                 <button className="p-3 bg-white rounded-xl border-2 border-blue-200 text-blue-300 cursor-pointer hover:bg-blue-300 hover:text-white">Roadmap du projet</button>
                     <div className="bg-blue-200 rounded-xl text-white flex justify-between overflow-hidden">
                         <button onClick={() => console.log("add")} className="p-3 cursor-pointer hover:bg-blue-300">Ajouter étape</button>
@@ -91,34 +91,43 @@ function TopPanelAction () {
     }
 }
 
-function LeftPanel () {
+function LeftPanel ( {open} ) {
     return (
-        <div className="p-6 bg-slate-50">
+        <div className={`bg-slate-50 ${(open) ? `w-[400px] p-6` : `w-[0px] p-0`} transition-all duration-300`} >
             <Route />
         </div>
     )
 }
 
-function TopPanel () {
+function TopPanel ( {sideBarOpen, setSideBarOpen}) {
     const pathname = usePathname().split("/")
     return (
         <div className="flex-1">
             <div className="bg-slate-100 flex justify-between items-center p-4">
-                <p className="text-4xl">{capitalize(pathname[pathname.length - 1].replace("_", " "))}</p>
+                <div className="flex items-center gap-5">
+                    <button onClick={() => setSideBarOpen(!sideBarOpen)}><FontAwesomeIcon icon={faWindowMaximize} style={{transform: "scaleX(-1)", fontSize: "24px"}}></FontAwesomeIcon></button>
+                    
+                    <p className="text-4xl">{capitalize(pathname[pathname.length - 1].replace("_", " "))}</p>
+                </div>
+                
                 <TopPanelAction></TopPanelAction>
             </div>
-            <CurrentPath className="pl-4" />
+            <CurrentPath />
         </div>
     )
 }
 
 export default function BaseLayout ( {children} ) {
+
+    const [sideBarOpen, setSideBarOpen] = useState(true)
+
     return (
         <div className="flex h-screen">
-            <LeftPanel className="h-full" />
-            <div className="flex flex-col w-full">
-                <TopPanel />
-                <div className="h-full bg-slate-200">
+            
+            <LeftPanel className="h-full" open={sideBarOpen}/>
+            <div className="flex flex-col w-full" style={{boxShadow: "inset 8px 0 10px -5px rgba(0, 0, 0, 0.2)"}}>
+                <TopPanel sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} />
+                <div className="h-full bg-slate-200 " style={{boxShadow: "inset 8px 0 10px -5px rgba(0, 0, 0, 0.2)"}}>
                     {children}
                 </div>
             </div>

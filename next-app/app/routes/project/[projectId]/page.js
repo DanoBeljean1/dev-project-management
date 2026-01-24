@@ -40,11 +40,10 @@ export default function ProjectDetails () {
         fetchData()
     }, [])
 
-    // fetchData()
 
     return (<div>
         <BaseLayout>
-                <div className="flex">
+                <div className="flex relative h-full">
                     <div className="basis-1/2 p-8">
                         {projectData.map((name, index) => (
                             <div key={index} className="pb-4">
@@ -79,7 +78,16 @@ export default function ProjectDetails () {
                             
                     </div>
                     <div className="basis-1/2"></div>
+
+                    <div className="absolute bottom-0 w-full flex justify-center pb-10">
+                    <div className="bg-white flex rounded-full overflow-hidden">
+                        <button className="p-2 m-2 rounded-full hover:bg-blue-300 hover:cursor-pointer">Life path</button>
+                        <button className="p-2 m-2 rounded-full hover:bg-blue-300 hover:cursor-pointer">Roadmap</button>
+                        <button className="p-2 m-2 rounded-full hover:bg-blue-300 hover:cursor-pointer">View</button>
+                    </div>
                 </div>
+                </div>
+
                 
         </BaseLayout>
     </div>)

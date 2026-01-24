@@ -34,7 +34,8 @@ export default function Home() {
             <div style={styles.box} className="basis-1/3">Tracker d'activités</div>
             <div style={styles.box} className="basis-2/3">Activités récentes</div>
           </div>
-          <div style={styles.box} className="m-8 flex gap-5">
+          <div className="p-8">
+          <div style={styles.box} className=" flex gap-5">
             
             <div className="basis-1/2 flex gap-10">
             
@@ -42,14 +43,14 @@ export default function Home() {
                 <div className="h-full flex flex-col justify-center">
                 <FontAwesomeIcon
                 icon={faCircleCheck}
-                style={{ fontSize: 48, color: "white", width: 48, height: 48, backgroundColor: "rgb(91, 175, 105)", padding: "10px", border: "0px solid grey", borderRadius: "10px" }}
+                style={{ fontSize: 36, color: "white", width: 36, height: 36, backgroundColor: "rgb(91, 175, 105)", padding: "10px", border: "0px solid grey", borderRadius: "10px" }}
               />
                 </div>
             
 
 
                 <div className="flex flex-col justify-center">
-                  <p>Projets terminés</p>
+                  <p className="text-nowrap">Projets terminés</p>
                   <p className="text-4xl flex justify-center">5</p>
                 </div>
               </div>
@@ -57,24 +58,25 @@ export default function Home() {
               <div className="h-full flex flex-col justify-center">
                 <FontAwesomeIcon
                 icon={faClock}
-                style={{ fontSize: 48, color: "white", width: 48, height: 48, backgroundColor: "rgb(175, 189, 233)", padding: "10px", border: "0px solid grey", borderRadius: "10px" }}
+                style={{ fontSize: 36, color: "white", width: 36, height: 36, backgroundColor: "rgb(175, 189, 233)", padding: "10px", border: "0px solid grey", borderRadius: "10px" }}
               />
               </div>
                 <div className="flex flex-col justify-center">
-                  <p>Projets en cours</p>
+                  <p className="text-nowrap">Projets en cours</p>
                   <p className="text-4xl flex justify-center">5</p>
                 </div>
               </div>
             </div>
             <div className="basis-1/2 flex">
               <p className="">Projet récent</p>
-              <div className="bg-slate-200 w-full m-3 border border-gray-400 rounded-lg flex justify-between p-2">
+              <div className="bg-slate-200 w-full m-3 h-min border border-gray-400 rounded-lg flex justify-between p-2">
                 <div>projet</div>
-                <button onClick={() => {}}>
+                <button className="h-[24px]" onClick={() => {}}>
                   <FontAwesomeIcon icon={faEllipsisV} style={{ fontSize: 24, color: "grey", width: 24, height: 24}} />
                 </button>
               </div>
             </div>
+          </div>
           </div>
           <div className="p-8 gap-8 flex flex-wrap">
             <div style={styles.box} className="w-64 h-48">
