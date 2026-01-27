@@ -14,9 +14,9 @@ export async function POST(request) {
 
             // Choose a name for your collection
             const collection = database.collection("projects");
-
-            await collection.updateOne({user: "dano"}, {$set: {"projects.test_projet.lifepath": data}})
-            return NextResponse.json({message: data}, {status: 200})
+            const name = `projects.${data.name}.lifepath`
+            await collection.updateOne({user: "dano"}, {$set: {[name]: data.data}})
+            return NextResponse.json({message: data.data}, {status: 200})
         } catch (error) {
             return NextResponse.json({message: "Error while updating"}, {status: 500})
         } finally {

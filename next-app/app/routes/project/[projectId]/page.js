@@ -10,6 +10,7 @@ import { faCheckCircle } from "@fortawesome/free-solid-svg-icons"
 import { faClock } from "@fortawesome/free-solid-svg-icons"
 import { faCalendar } from "@fortawesome/free-solid-svg-icons"
 import { faBarsStaggered } from "@fortawesome/free-solid-svg-icons"
+import { jsx } from "react/jsx-runtime"
 
 export default function ProjectDetails () {
     const projectId = useParams().projectId
@@ -64,7 +65,13 @@ export default function ProjectDetails () {
     }, [])
 
     const sendData = async () => {
-        const response = await fetch("/api/saveData", {method: "POST", body: JSON.stringify(projectData)})
+        
+        const response = await fetch("/api/saveData", {method: "POST", body: JSON.stringify(
+            {
+                "name":projectId,
+                "data":projectData
+            }
+        )})
         .then((res) => console.log(res.json()))
     }
 
