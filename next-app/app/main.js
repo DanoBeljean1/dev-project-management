@@ -82,7 +82,6 @@ function TopPanelAction ( {projectData, setProjectData} ) {
                 <button className="p-3 bg-white rounded-xl border-2 border-blue-200 text-blue-300 cursor-pointer hover:bg-blue-300 hover:text-white">Roadmap du projet</button>
                     <div className="bg-blue-200 rounded-xl text-white flex justify-between overflow-hidden">
                         <button onClick={() => {
-                            let x = {"title":"new", "description":"new", "date":"2027-01-02", "status":0}
                             setProjectData(prev => ([
   ...prev,
   {"title":"new", "description":"new", "date":"2027-01-02", "status":0}

@@ -1,32 +1,27 @@
 import { MongoClient } from "mongodb";
+import { NextResponse } from "next/server";
 
-export async function handler(req, res) {
-    if (req.method === "POST") {
-        const { data } = req.body;
 
-        const client = new MongoClient(process.env.MONGODB_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+export async function POST(request) {
+    const data = await request.json()
+    const client = new MongoClient(process.env.MONGODB_URI);
 
         try {
             await client.connect();
 
             // Choose a name for your database
-            const database = client.db("user_projects");
+            const database = client.db("sample_mflix");
 
             // Choose a name for your collection
-            const collection = database.collection("user_data_collection");
+            const collection = database.collection("projects");
 
-            await collection.insertOne({ data });
-
-            res.status(201).json({ message: "Data saved successfully!" });
+            await collection.updateOne({user: "dano"}, {$set: {"projects.test_projet.lifepath": data}})
+            return NextResponse.json({message: data}, {status: 200})
         } catch (error) {
-            res.status(500).json({ message: "Something went wrong!" });
+            return NextResponse.json({message: "Error while updating"}, {status: 500})
         } finally {
             await client.close();
         }
-    } else {
-        res.status(405).json({ message: "Method not allowed!" });
-    }
 }
+
+

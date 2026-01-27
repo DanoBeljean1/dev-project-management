@@ -63,6 +63,11 @@ export default function ProjectDetails () {
         fetchData()
     }, [])
 
+    const sendData = async () => {
+        const response = await fetch("/api/saveData", {method: "POST", body: JSON.stringify(projectData)})
+        .then((res) => console.log(res.json()))
+    }
+
 
     return (<div>
         <BaseLayout projectData={projectData} setProjectData={setProjectData}>
@@ -88,6 +93,10 @@ export default function ProjectDetails () {
                                             switch (e.key) {
                                                 case "Enter":
                                                     setEditing(defaultEditing)
+                                                    let temp = projectData
+                                                    temp[index].title = tempData
+                                                    setProjectData(temp)
+                                                    sendData()
                                                     break;
                                                 case "Tab":
                                                     setEditing(editingDescription(index))
@@ -98,11 +107,18 @@ export default function ProjectDetails () {
                                             }
                                         }}></input> : <p onClick={() => {setEditing(editingTitle(index)); setTempData(name.title)}} className="font-semibold">{name.title}</p>}
                                         
-                                        <div style={{backgroundColor: (name.status) ? "#b3eebf" : "#9eb4d7", color: (name.status) ? "#4f9f60" : ""}} className="text-xs p-1 h-min px-4 border border-slate-500 rounded-lg">{(name.status) ? "Terminé" : "Actuel"}</div></div>
+                                        <div style={{backgroundColor: (name.status) ? "#b3eebf" : "#9eb4d7", color: (name.status) ? "#4f9f60" : ""}} className="text-xs p-1 h-min px-4 border border-slate-500 rounded-lg" onClick={() => {
+                                            let temp = projectData.slice()
+                                            temp[index].status = !temp[index].status
+                                            setProjectData(temp)
+                                        }}>{(name.status) ? "Terminé" : "Actuel"}</div></div>
                                     {(editing.description == (index + 1)) ? <textarea type="text" className="w-full border border-slate-400 border-2 bg-white rounded-lg p-1 px-2" autoFocus={true} aria-selected value={tempData} onChange={e => setTempData(e.target.value)} onKeyDown={e => {
                                             switch (e.key) {
                                                 case "Enter":
                                                     setEditing(defaultEditing)
+                                                    let temp = projectData
+                                                    temp[index].description = tempData
+                                                    setProjectData(temp)
                                                     break;
                                                 case "Tab":
                                                     setEditing(editingTitle(((index+1)%projectData.length)))
