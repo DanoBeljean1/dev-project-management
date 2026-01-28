@@ -31,6 +31,8 @@ function LifePath ( props ) {
 
                 setAllData(names);
                 props.setProjectData(data[0].projects[projectId].lifepath)
+                props.setProjectRoadMap(data[0].projects[projectId].roadmap)
+                console.log("rdmp, ", data[0].projects[projectId].roadmap)
                 console.log("projectdata, ", data[0].projects[projectId].lifepath)
                   
             }
@@ -150,30 +152,49 @@ function LifePath ( props ) {
     )
 }
 
-function RoadMap () {
-    const [textAreaValue, setTextAreaValue] = useState("cocou")
+function RoadMap ( {projectRoadMap, setProjectRoadMap} ) {
 
-    const [boxNames, setBoxNames] = useState([{"parent":"Informations principales", "child":[{"name":"Description", "value":""}, {"name":"Objectif principal", "value":""}, {"name":"Publique cible", "value":""}, {"name":"Niveau de difficulté", "value":""}]}])
+    // const [boxNames, setBoxNames] = useState([{"parent":"Informations principales", "child":[{"name":"Description", "value":""}, {"name":"Objectif principal", "value":""}, {"name":"Publique cible", "value":""}, {"name":"Niveau de difficulté", "value":""}]}])
+    const projectId = useParams().projectId
+
+
+    const sendData = async () => {
+        await fetch("/api/saveData", {method: "POST", body: JSON.stringify({
+            "name":projectId,
+            "data":projectRoadMap,
+            "action":"roadmap"
+        })}).then((res) => console.log(res.json()))
+    }
 
     return (
         <div className="flex w-full">
             <div className="p-8 basis-2/3">
             
             <div className="basis-1/2"> 
-                    {boxNames.map((value, index) => (
+                    {projectRoadMap.map((value, index) => (
                         <div key={index}>
                             <div className="p-6 bg-slate-50 rounded-xs">
-                            <p className="text-2xl font-bold">{value.parent}</p>
+                                <div className="flex justify-between"><p className="text-2xl font-bold">{value.parent}</p><button onClick={() => sendData()} className="bg-blue-300 px-2 rounded-lg cursor-pointer hover:bg-blue-400 active:bg-blue-200">save</button></div>
+                            
                             {value.child.map((child, ind) => (
                                 <div key={ind}>
                                     <p className="text-xl pt-3">{child.name}</p>
                                     <textarea className={`textarea overflow-y-auto pl-4 border-l-2 border-slate-500 w-full bg-white`} style={{height: "25px", resize: "none"}} value={child.value} onChange={(e) => {
-                                    let temparea = boxNames.slice()
+                                    
+                                    let temparea = projectRoadMap.slice()
                                     temparea[index].child[ind].value = e.target.value
-                                    setBoxNames(temparea);
+                                    setProjectRoadMap(temparea);
+
                                     e.target.style.height = "25px"
                                     e.target.style.height = e.target.scrollHeight + "px"
-                                    }}></textarea>
+
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key == "Enter") {
+                                            sendData()
+                                        }
+                                    }}
+                                    ></textarea>
                                 </div>
                             ))}
                             
@@ -193,6 +214,7 @@ export default function ProjectDetails () {
 
     const [tempData, setTempData] = useState('')
     const [projectData, setProjectData] = useState([{"chargement":"..."}])
+    const [projectRoadMap, setProjectRoadMap] = useState([])
 
     const [currentView, setCurrentView] = useState("lifepath")
 
@@ -201,8 +223,8 @@ export default function ProjectDetails () {
         <BaseLayout projectData={projectData} setProjectData={setProjectData}>
                 <div className="flex relative h-full">
                     
-                    {(currentView == "lifepath") && <LifePath projectData={projectData} setProjectData={setProjectData} tempData={tempData} setTempData={setTempData} />}
-                    {(currentView == "roadmap") && <RoadMap />}
+                    {(currentView == "lifepath") && <LifePath projectRoadMap={projectRoadMap} setProjectRoadMap={setProjectRoadMap} projectData={projectData} setProjectData={setProjectData} tempData={tempData} setTempData={setTempData} />}
+                    {(currentView == "roadmap") && <RoadMap projectRoadMap={projectRoadMap} setProjectRoadMap={setProjectRoadMap} />}
 
                     <div className="absolute bottom-0 w-full flex justify-center pb-10">
                     <div className="bg-white flex rounded-full overflow-hidden">

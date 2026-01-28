@@ -16,6 +16,7 @@ export async function POST(request) {
             const collection = database.collection("projects");
             const name = `projects.${data.name}.lifepath`
             const prjName = `projects.${data.name}`
+            const rdName = `projects.${data.name}.roadmap`
             switch (data.action) {
 
                 case "update":
@@ -30,6 +31,9 @@ export async function POST(request) {
                     break;
                 case "delete":
                     await collection.updateOne({user: "dano"}, {$unset: {[prjName]: data.data}})
+                    break;
+                case "roadmap":
+                    await collection.updateOne({user: "dano"}, {$set: {[rdName]: data.data}})
                 default:
                     break;
             }
