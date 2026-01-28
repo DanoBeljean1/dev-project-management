@@ -12,12 +12,49 @@ import { faCalendar } from "@fortawesome/free-solid-svg-icons"
 import { faBarsStaggered } from "@fortawesome/free-solid-svg-icons"
 import { jsx } from "react/jsx-runtime"
 
-export default function ProjectDetails () {
-    const projectId = useParams().projectId
 
+function LifePath ( props ) {
+
+    const projectId = useParams().projectId
     const [allData, setAllData] = useState([])
-    const [tempData, setTempData] = useState('')
-    const [projectData, setProjectData] = useState([{"chargement":"..."}])
+
+
+    const fetchData = async () => {
+            const response = await fetch("/api/getAllData");
+    
+            if (response.ok) {
+                const data = await response.json()
+                const names = Object.keys(data[0].projects);
+
+                console.log(names)
+                console.log(data[0].projects[projectId].lifepath)
+
+                setAllData(names);
+                props.setProjectData(data[0].projects[projectId].lifepath)
+                console.log("projectdata, ", data[0].projects[projectId].lifepath)
+                  
+            }
+            else {
+                console.log("Error while fetching data.")
+            }
+        }
+
+        useEffect(() => {
+        fetchData()
+    }, [])
+
+    const sendData = async () => {
+        
+        await fetch("/api/saveData", {method: "POST", body: JSON.stringify(
+            {
+                "name":projectId,
+                "data":props.projectData,
+                "action":"update"
+            }
+        )})
+        .then((res) => console.log(res.json()))
+    }
+
     const [editing, setEditing] = useState({
         "title":0,
         "description":0
@@ -37,127 +74,140 @@ export default function ProjectDetails () {
         "title":0,
         "description":0
     })
+    return (
+        <div className="basis-1/2 p-8">
+            {props.projectData.map((name, index) => (
+                <div key={index} className="pb-4">
+                
+                <div className="flex items-center gap-5 relative">
+                    <div className="flex flex-col">
+                        
+                    <FontAwesomeIcon icon={(name.status) ? faCheckCircle : faClock} style={{color: "white", fontSize: "32px", backgroundColor: (name.status) ? "#9ccd93" : "#9eb4d7"}} className="p-2 px-1 rounded-full border-2 border-slate-100"></FontAwesomeIcon>
+                        <div className="flex h-full">
+                            <div className="relative basis-1/2">
+                                <div className="absolute left-full top-[0px] border-slate-100 border border-0 border-l-2 h-30"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-slate-50 w-full border border-slate-400 p-4 rounded-lg">
+                        
+                        <div className="flex justify-between">
+                            {(editing.title == (index + 1)) ? <input type="text" className="border border-slate-400 border-2 bg-white rounded-lg p-1 px-2" autoFocus={true} aria-selected value={props.tempData} onChange={e => props.setTempData(e.target.value)} onKeyDown={e => {
+                                switch (e.key) {
+                                    case "Enter":
+                                        setEditing(defaultEditing)
+                                        let temp = props.projectData
+                                        temp[index].title = props.tempData
+                                        props.setProjectData(temp)
+                                        sendData()
+                                        break;
+                                    case "Tab":
+                                        setEditing(editingDescription(index))
+                                        props.setTempData(name.description)
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }}></input> : <p onClick={() => {setEditing(editingTitle(index)); props.setTempData(name.title)}} className="font-semibold">{name.title}</p>}
+                            
+                            <div style={{backgroundColor: (name.status) ? "#b3eebf" : "#9eb4d7", color: (name.status) ? "#4f9f60" : ""}} className="text-xs p-1 h-min px-4 border border-slate-500 rounded-lg" onClick={() => {
+                                let temp = props.projectData.slice()
+                                temp[index].status = !temp[index].status
+                                props.setProjectData(temp)
+                            }}>{(name.status) ? "Terminé" : "Actuel"}</div></div>
+                        {(editing.description == (index + 1)) ? <textarea type="text" className="w-full border border-slate-400 border-2 bg-white rounded-lg p-1 px-2" autoFocus={true} aria-selected value={props.tempData} onChange={e => props.setTempData(e.target.value)} onKeyDown={e => {
+                                switch (e.key) {
+                                    case "Enter":
+                                        setEditing(defaultEditing)
+                                        let temp = props.projectData
+                                        temp[index].description = props.tempData
+                                        props.setProjectData(temp)
+                                        sendData()
+                                        break;
+                                    case "Tab":
+                                        setEditing(editingTitle(((index+1)%props.projectData.length)))
+                                        props.setTempData(name.description)
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }}></textarea> : <p onClick={() => {setEditing(editingDescription(index)); setTempData(name.description)}}>{name.description}</p>}
+                        <div className="flex items-center gap-2 pt-4">
+                            <FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon>
+                            <p className="">{(new Date(name.date)).toDateString()}</p>
+                        </div>
+                        </div>
+                        
+                </div>
+                </div>
+                ))}
+                <div className="flex items-center gap-2 p-2 pl-4 mt-8 text-slate-600 border border-slate-300 bg-slate-100 rounded-xl">
+                    <FontAwesomeIcon icon={faBarsStaggered}></FontAwesomeIcon>
+                    <p>fin du projet</p>
+                </div>
+                
+        </div>
+    )
+}
 
+function RoadMap () {
+    const [textAreaValue, setTextAreaValue] = useState("cocou")
 
-    
-        const fetchData = async () => {
-            const response = await fetch("/api/getAllData");
-    
-            if (response.ok) {
-                const data = await response.json()
-                const names = Object.keys(data[0].projects);
+    const [boxNames, setBoxNames] = useState([{"parent":"Informations principales", "child":[{"name":"Description", "value":""}, {"name":"Objectif principal", "value":""}, {"name":"Publique cible", "value":""}, {"name":"Niveau de difficulté", "value":""}]}])
 
-                console.log(names)
-                console.log(data[0].projects[projectId].lifepath)
-
-                setAllData(names);
-                setProjectData(data[0].projects[projectId].lifepath)
-                console.log("projectdata, ", data[0].projects[projectId].lifepath)
-                  
-            }
-            else {
-                console.log("Error while fetching data.")
-            }
-        }
-
-        useEffect(() => {
-        fetchData()
-    }, [])
-
-    const sendData = async () => {
+    return (
+        <div className="flex w-full">
+            <div className="p-8 basis-2/3">
+            
+            <div className="basis-1/2"> 
+                    {boxNames.map((value, index) => (
+                        <div key={index}>
+                            <div className="p-6 bg-slate-50 rounded-xs">
+                            <p className="text-2xl font-bold">{value.parent}</p>
+                            {value.child.map((child, ind) => (
+                                <div key={ind}>
+                                    <p className="text-xl pt-3">{child.name}</p>
+                                    <textarea className={`textarea overflow-y-auto pl-4 border-l-2 border-slate-500 w-full bg-white`} style={{height: "25px", resize: "none"}} value={child.value} onChange={(e) => {
+                                    let temparea = boxNames.slice()
+                                    temparea[index].child[ind].value = e.target.value
+                                    setBoxNames(temparea);
+                                    e.target.style.height = "25px"
+                                    e.target.style.height = e.target.scrollHeight + "px"
+                                    }}></textarea>
+                                </div>
+                            ))}
+                            
+                        </div>
+                        </div>
+                    ))}
+            </div>
+        </div>
+        </div>
         
-        const response = await fetch("/api/saveData", {method: "POST", body: JSON.stringify(
-            {
-                "name":projectId,
-                "data":projectData,
-                "action":"update"
-            }
-        )})
-        .then((res) => console.log(res.json()))
-    }
+    )
+}
+
+
+export default function ProjectDetails () {
+    
+
+    const [tempData, setTempData] = useState('')
+    const [projectData, setProjectData] = useState([{"chargement":"..."}])
+
+    const [currentView, setCurrentView] = useState("lifepath")
 
 
     return (<div>
         <BaseLayout projectData={projectData} setProjectData={setProjectData}>
                 <div className="flex relative h-full">
-                    <div className="basis-1/2 p-8">
-                        {projectData.map((name, index) => (
-                            <div key={index} className="pb-4">
-                            
-                            <div className="flex items-center gap-5 relative">
-                                <div className="flex flex-col">
-                                    
-                                <FontAwesomeIcon icon={(name.status) ? faCheckCircle : faClock} style={{color: "white", fontSize: "32px", backgroundColor: (name.status) ? "#9ccd93" : "#9eb4d7"}} className="p-2 px-1 rounded-full border-2 border-slate-100"></FontAwesomeIcon>
-                                    <div className="flex h-full">
-                                        <div className="relative basis-1/2">
-                                            <div className="absolute left-full top-[0px] border-slate-100 border border-0 border-l-2 h-30"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="bg-slate-50 w-full border border-slate-400 p-4 rounded-lg">
-                                    
-                                    <div className="flex justify-between">
-                                        {(editing.title == (index + 1)) ? <input type="text" className="border border-slate-400 border-2 bg-white rounded-lg p-1 px-2" autoFocus={true} aria-selected value={tempData} onChange={e => setTempData(e.target.value)} onKeyDown={e => {
-                                            switch (e.key) {
-                                                case "Enter":
-                                                    setEditing(defaultEditing)
-                                                    let temp = projectData
-                                                    temp[index].title = tempData
-                                                    setProjectData(temp)
-                                                    sendData()
-                                                    break;
-                                                case "Tab":
-                                                    setEditing(editingDescription(index))
-                                                    setTempData(name.description)
-                                                    break;
-                                                default:
-                                                    break;
-                                            }
-                                        }}></input> : <p onClick={() => {setEditing(editingTitle(index)); setTempData(name.title)}} className="font-semibold">{name.title}</p>}
-                                        
-                                        <div style={{backgroundColor: (name.status) ? "#b3eebf" : "#9eb4d7", color: (name.status) ? "#4f9f60" : ""}} className="text-xs p-1 h-min px-4 border border-slate-500 rounded-lg" onClick={() => {
-                                            let temp = projectData.slice()
-                                            temp[index].status = !temp[index].status
-                                            setProjectData(temp)
-                                        }}>{(name.status) ? "Terminé" : "Actuel"}</div></div>
-                                    {(editing.description == (index + 1)) ? <textarea type="text" className="w-full border border-slate-400 border-2 bg-white rounded-lg p-1 px-2" autoFocus={true} aria-selected value={tempData} onChange={e => setTempData(e.target.value)} onKeyDown={e => {
-                                            switch (e.key) {
-                                                case "Enter":
-                                                    setEditing(defaultEditing)
-                                                    let temp = projectData
-                                                    temp[index].description = tempData
-                                                    setProjectData(temp)
-                                                    sendData()
-                                                    break;
-                                                case "Tab":
-                                                    setEditing(editingTitle(((index+1)%projectData.length)))
-                                                    setTempData(name.description)
-                                                    break;
-                                                default:
-                                                    break;
-                                            }
-                                        }}></textarea> : <p onClick={() => {setEditing(editingDescription(index)); setTempData(name.description)}}>{name.description}</p>}
-                                    <div className="flex items-center gap-2 pt-4">
-                                        <FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon>
-                                        <p className="">{(new Date(name.date)).toDateString()}</p>
-                                    </div>
-                                    </div>
-                                    
-                            </div>
-                            </div>
-                            ))}
-                            <div className="flex items-center gap-2 p-2 pl-4 mt-8 text-slate-600 border border-slate-300 bg-slate-100 rounded-xl">
-                                <FontAwesomeIcon icon={faBarsStaggered}></FontAwesomeIcon>
-                                <p>fin du projet</p>
-                            </div>
-                            
-                    </div>
-                    <div className="basis-1/2"></div>
+                    
+                    {(currentView == "lifepath") && <LifePath projectData={projectData} setProjectData={setProjectData} tempData={tempData} setTempData={setTempData} />}
+                    {(currentView == "roadmap") && <RoadMap />}
 
                     <div className="absolute bottom-0 w-full flex justify-center pb-10">
                     <div className="bg-white flex rounded-full overflow-hidden">
-                        <button className="p-2 m-2 rounded-full hover:bg-blue-300 hover:cursor-pointer">Life path</button>
-                        <button className="p-2 m-2 rounded-full hover:bg-blue-300 hover:cursor-pointer">Roadmap</button>
+                        <button onClick={() => setCurrentView("lifepath")} className="p-2 m-2 rounded-full hover:bg-blue-300 hover:cursor-pointer">Life path</button>
+                        <button onClick={() => setCurrentView("roadmap")} className="p-2 m-2 rounded-full hover:bg-blue-300 hover:cursor-pointer">Roadmap</button>
                         <button className="p-2 m-2 rounded-full hover:bg-blue-300 hover:cursor-pointer">View</button>
                     </div>
                 </div>
