@@ -69,7 +69,8 @@ export default function ProjectDetails () {
         const response = await fetch("/api/saveData", {method: "POST", body: JSON.stringify(
             {
                 "name":projectId,
-                "data":projectData
+                "data":projectData,
+                "action":"update"
             }
         )})
         .then((res) => console.log(res.json()))
@@ -126,6 +127,7 @@ export default function ProjectDetails () {
                                                     let temp = projectData
                                                     temp[index].description = tempData
                                                     setProjectData(temp)
+                                                    sendData()
                                                     break;
                                                 case "Tab":
                                                     setEditing(editingTitle(((index+1)%projectData.length)))

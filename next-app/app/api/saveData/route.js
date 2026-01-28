@@ -15,7 +15,25 @@ export async function POST(request) {
             // Choose a name for your collection
             const collection = database.collection("projects");
             const name = `projects.${data.name}.lifepath`
-            await collection.updateOne({user: "dano"}, {$set: {[name]: data.data}})
+            const prjName = `projects.${data.name}`
+            switch (data.action) {
+
+                case "update":
+                    
+                    await collection.updateOne({user: "dano"}, {$set: {[name]: data.data}})
+                    break;
+                case "create":
+                    await collection.updateOne({user: "dano"}, {$set: {[name]: data.data}})
+                    break;
+                case "addpath":
+                    await collection.updateOne({user: "dano"}, {$set: {[name]: data.data}})
+                    break;
+                case "delete":
+                    await collection.updateOne({user: "dano"}, {$unset: {[prjName]: data.data}})
+                default:
+                    break;
+            }
+            
             return NextResponse.json({message: data.data}, {status: 200})
         } catch (error) {
             return NextResponse.json({message: "Error while updating"}, {status: 500})

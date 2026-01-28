@@ -2,6 +2,8 @@
 
 import BaseLayout from "@/main";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 
 
 export default function Project () {
@@ -22,6 +24,15 @@ export default function Project () {
         }
     }
 
+    const newProject = async () => {
+        await fetch ("/api/saveData", {method: "POST", body: JSON.stringify({
+            "name":"monprojet",
+            "data":[],
+            "action":"create"
+        })})
+        .then((res) => console.log(res.json()))
+    }
+
     return <div>
         <BaseLayout>
         <button onClick={() => fetchData()}>fetch</button>
@@ -31,6 +42,14 @@ export default function Project () {
           {name}
         </div>
       ))}
+
+      <div className="p-6">
+        <div className="flex gap-10">
+            <button onClick={() => newProject()} className="bg-slate-50 rounded-xl p-4">
+                <FontAwesomeIcon icon={faPlusSquare} style={{fontSize: 128}}></FontAwesomeIcon>
+            </button>
+        </div>
+      </div>
 
         </BaseLayout>
     </div>
