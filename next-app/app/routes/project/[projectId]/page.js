@@ -240,7 +240,10 @@ function RoadMap ( {projectRoadMap, setProjectRoadMap, currentView} ) {
                         </div>
                         </div>
                     ))}
-        <div className="basis-1/3"></div>
+                    </div>
+        <div className="basis-1/3 p-8">
+                    menu
+        
         </div>
         </div>
         
