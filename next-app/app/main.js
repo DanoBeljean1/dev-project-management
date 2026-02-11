@@ -176,3 +176,5 @@ export default function BaseLayout ( {children, projectData, setProjectData} ) {
         </div>
     )
 }
+
+// npm run dev -- -H 0.0.0.0 -p 3000
