@@ -10,6 +10,7 @@ import { faCheckCircle } from "@fortawesome/free-solid-svg-icons"
 import { faClock } from "@fortawesome/free-solid-svg-icons"
 import { faCalendar } from "@fortawesome/free-solid-svg-icons"
 import { faBarsStaggered } from "@fortawesome/free-solid-svg-icons"
+import { useRef } from "react"
 import { jsx } from "react/jsx-runtime"
 
 
@@ -152,10 +153,18 @@ function LifePath ( props ) {
     )
 }
 
-function RoadMap ( {projectRoadMap, setProjectRoadMap} ) {
+function RoadMap ( {projectRoadMap, setProjectRoadMap, currentView} ) {
 
     // const [boxNames, setBoxNames] = useState([{"parent":"Informations principales", "child":[{"name":"Description", "value":""}, {"name":"Objectif principal", "value":""}, {"name":"Publique cible", "value":""}, {"name":"Niveau de difficulté", "value":""}]}])
     const projectId = useParams().projectId
+    const [showSaveButton, setShowSaveButton] = useState(-1)
+    const refs = useRef([])
+
+    const addToRefs = (el) => {
+    if (el && !refs.current.includes(el)) {
+      refs.current.push(el);
+    }
+  };
 
 
     const sendData = async () => {
@@ -166,20 +175,42 @@ function RoadMap ( {projectRoadMap, setProjectRoadMap} ) {
         })}).then((res) => console.log(res.json()))
     }
 
+    useEffect(() => {
+        let r = 0
+        for (let index = 0; index < projectRoadMap.length; index++) {
+            
+            for (let ind = 0; ind < projectRoadMap[index].child.length; ind++) {
+                let temparea = projectRoadMap.slice()
+                
+                temparea[index].child[ind].value = refs.current[r].value
+                console.log(temparea)
+                setProjectRoadMap(temparea);
+
+                refs.current[r].style.height = "25px"
+                refs.current[r].style.height = refs.current[r].scrollHeight + "px"
+                r++
+            }
+        }
+        
+    }, [currentView])
+
     return (
         <div className="flex w-full">
             <div className="p-8 basis-2/3">
             
-            <div className="basis-1/2"> 
                     {projectRoadMap.map((value, index) => (
-                        <div key={index}>
-                            <div className="p-6 bg-slate-50 rounded-xs">
-                                <div className="flex justify-between"><p className="text-2xl font-bold">{value.parent}</p><button onClick={() => sendData()} className="bg-blue-300 px-2 rounded-lg cursor-pointer hover:bg-blue-400 active:bg-blue-200">save</button></div>
+                        <div key={index} className="pb-10">
+                            <div className="p-6 bg-slate-50 shadow rounded-xs" onMouseLeave={() => setShowSaveButton(-1)} onMouseOver={() => setShowSaveButton(index)}>
+                                <div className="flex justify-between"><p className="text-2xl font-bold">{value.parent}</p>
+                                   { (index == showSaveButton) ? <button onClick={() => sendData()} className="bg-blue-300 px-2 rounded-lg cursor-pointer border-1 border-blue-400 hover:bg-blue-400 active:bg-blue-200">save all</button>
+                             : <div></div>
+                                }</div>
                             
                             {value.child.map((child, ind) => (
+
                                 <div key={ind}>
                                     <p className="text-xl pt-3">{child.name}</p>
-                                    <textarea className={`textarea overflow-y-auto pl-4 border-l-2 border-slate-500 w-full bg-white`} style={{height: "25px", resize: "none"}} value={child.value} onChange={(e) => {
+                                    <textarea ref={addToRefs} className={`textarea overflow-y-auto pl-4 border-l-2 border-slate-500 w-full bg-white`} style={{height: "25px", resize: "none"}} value={child.value} onChange={(e) => {
                                     
                                     let temparea = projectRoadMap.slice()
                                     temparea[index].child[ind].value = e.target.value
@@ -194,6 +225,14 @@ function RoadMap ( {projectRoadMap, setProjectRoadMap} ) {
                                             sendData()
                                         }
                                     }}
+                                    onMouseOver={(e) => {
+                                        let temparea = projectRoadMap.slice()
+                                        temparea[index].child[ind].value = e.target.value
+                                        setProjectRoadMap(temparea);
+
+                                        e.target.style.height = "25px"
+                                        e.target.style.height = e.target.scrollHeight + "px"
+                                    }}
                                     ></textarea>
                                 </div>
                             ))}
@@ -201,7 +240,7 @@ function RoadMap ( {projectRoadMap, setProjectRoadMap} ) {
                         </div>
                         </div>
                     ))}
-            </div>
+        <div className="basis-1/3"></div>
         </div>
         </div>
         
@@ -224,10 +263,10 @@ export default function ProjectDetails () {
                 <div className="flex relative h-full">
                     
                     {(currentView == "lifepath") && <LifePath projectRoadMap={projectRoadMap} setProjectRoadMap={setProjectRoadMap} projectData={projectData} setProjectData={setProjectData} tempData={tempData} setTempData={setTempData} />}
-                    {(currentView == "roadmap") && <RoadMap projectRoadMap={projectRoadMap} setProjectRoadMap={setProjectRoadMap} />}
+                    {(currentView == "roadmap") && <RoadMap currentView={currentView} projectRoadMap={projectRoadMap} setProjectRoadMap={setProjectRoadMap} />}
 
-                    <div className="absolute bottom-0 w-full flex justify-center pb-10">
-                    <div className="bg-white flex rounded-full overflow-hidden">
+                    <div className="absolute bottom-10 w-full flex justify-center pb-10">
+                    <div className="bg-white shadow fixed flex rounded-full overflow-hidden">
                         <button onClick={() => setCurrentView("lifepath")} className="p-2 m-2 rounded-full hover:bg-blue-300 hover:cursor-pointer">Life path</button>
                         <button onClick={() => setCurrentView("roadmap")} className="p-2 m-2 rounded-full hover:bg-blue-300 hover:cursor-pointer">Roadmap</button>
                         <button className="p-2 m-2 rounded-full hover:bg-blue-300 hover:cursor-pointer">View</button>
@@ -239,3 +278,86 @@ export default function ProjectDetails () {
         </BaseLayout>
     </div>)
 }
+
+/*
+sauvegarde roadmap
+
+"roadmap": [
+        {
+          "parent": "Informations principales",
+          "child": [
+            {
+              "name": "Description",
+              "value": "Ici il faut mettre une descriptiondonc je mets une description"
+            },
+            {
+              "name": "Objectif principal",
+              "value": "l'objectif principal est de..."
+            },
+            {
+              "name": "Publique cible",
+              "value": ""
+            },
+            {
+              "name": "Niveau de difficulté",
+              "value": ""
+            }
+          ]
+        },
+        {
+          "parent": "Problématique et idées",
+          "child": [
+            {
+              "name": "Valeur ajoutée du projet",
+              "value": "Ici il faut mettre une descriptiondonc je mets une description"
+            },
+            {
+              "name": "Technologies apprises durant le projet",
+              "value": "l'objectif principal est de..."
+            },
+            {
+              "name": "Fonctionnalitées clés",
+              "value": ""
+            },
+            {
+              "name": "Fonctionnalitées secondaires",
+              "value": ""
+            }
+          ]
+        },
+        {
+          "parent": "Technologies",
+          "child": [
+            {
+              "name": "Frontend",
+              "value": "Ici il faut mettre une descriptiondonc je mets une description"
+            },
+            {
+              "name": "Backend",
+              "value": "l'objectif principal est de..."
+            },
+            {
+              "name": "Base de données",
+              "value": ""
+            }
+          ]
+        },
+        {
+          "parent": "Déploiement et évolutions futures",
+          "child": [
+            {
+              "name": "Hébergement",
+              "value": "Ici il faut mettre une descriptiondonc je mets une description"
+            },
+            {
+              "name": "Nom de domaine",
+              "value": "l'objectif principal est de..."
+            },
+            {
+              "name": "Évolutions futures",
+              "value": ""
+            }
+          ]
+        }
+      ]
+*/

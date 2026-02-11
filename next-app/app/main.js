@@ -134,7 +134,7 @@ function TopPanelAction ( {projectData, setProjectData} ) {
 
 function LeftPanel ( {open} ) {
     return (
-        <div className={`bg-slate-50 ${(open) ? `w-[400px] p-6` : `w-[0px] p-0`} transition-all duration-300`} >
+        <div className={`top-0 left-0 bg-slate-50 ${(open) ? `w-[400px] p-6` : `w-[0px] p-0`} transition-all duration-300`} >
             <Route />
         </div>
     )
@@ -164,12 +164,12 @@ export default function BaseLayout ( {children, projectData, setProjectData} ) {
     
 
     return (
-        <div className="flex h-screen">
+        <div className="flex h-screen w-full fixed">
             
             <LeftPanel className="h-full" open={sideBarOpen}/>
             <div className="flex flex-col w-full" style={{boxShadow: "inset 8px 0 10px -5px rgba(0, 0, 0, 0.2)"}}>
                 <TopPanel sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} projectData={projectData} setProjectData={setProjectData} />
-                <div className="h-full bg-slate-200 " style={{boxShadow: "inset 8px 0 10px -5px rgba(0, 0, 0, 0.2)"}}>
+                <div className="overflow-scroll h-full bg-slate-200 " style={{boxShadow: "inset 8px 0 10px -5px rgba(0, 0, 0, 0.2)"}}>
                     {children}
                 </div>
             </div>
