@@ -6,7 +6,7 @@ import { useState } from "react"
 import { useEffect } from "react"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons"
+import { faAngleDown, faAngleRight, faArrowRight, faCheckCircle } from "@fortawesome/free-solid-svg-icons"
 import { faClock } from "@fortawesome/free-solid-svg-icons"
 import { faCalendar } from "@fortawesome/free-solid-svg-icons"
 import { faBarsStaggered } from "@fortawesome/free-solid-svg-icons"
@@ -159,6 +159,7 @@ function RoadMap ( {projectRoadMap, setProjectRoadMap, currentView} ) {
     const projectId = useParams().projectId
     const [showSaveButton, setShowSaveButton] = useState(-1)
     const refs = useRef([])
+    const [toggleAccordeon, setToggleAccordeon] = useState([true, true, true, true])
 
     const addToRefs = (el) => {
     if (el && !refs.current.includes(el)) {
@@ -201,14 +202,18 @@ function RoadMap ( {projectRoadMap, setProjectRoadMap, currentView} ) {
                     {projectRoadMap.map((value, index) => (
                         <div key={index} className="pb-10">
                             <div className="p-6 bg-slate-50 shadow rounded-xs" onMouseLeave={() => setShowSaveButton(-1)} onMouseOver={() => setShowSaveButton(index)}>
-                                <div className="flex justify-between"><p className="text-2xl font-bold">{value.parent}</p>
+                                <div className="flex justify-between"><div className="flex items-center gap-3"><button className="rounded-lg hover:bg-slate-200 active:bg-slate-300" onClick={() => {
+                                    let temp = toggleAccordeon.slice()
+                                    temp[index] = !temp[index]
+                                    setToggleAccordeon(temp)
+                                }}><FontAwesomeIcon icon={(toggleAccordeon[index]) ? faAngleDown : faAngleRight}></FontAwesomeIcon></button><p className="text-2xl font-bold">{value.parent}</p></div>
                                    { (index == showSaveButton) ? <button onClick={() => sendData()} className="bg-blue-300 px-2 rounded-lg cursor-pointer border-1 border-blue-400 hover:bg-blue-400 active:bg-blue-200">save all</button>
                              : <div></div>
                                 }</div>
                             
                             {value.child.map((child, ind) => (
 
-                                <div key={ind}>
+                                <div key={ind} className={`${(toggleAccordeon[index]) ? "block" : "hidden"} transition-all duration-300`}>
                                     <p className="text-xl pt-3">{child.name}</p>
                                     <textarea ref={addToRefs} className={`textarea overflow-y-auto pl-4 border-l-2 border-slate-500 w-full bg-white`} style={{height: "25px", resize: "none"}} value={child.value} onChange={(e) => {
                                     
