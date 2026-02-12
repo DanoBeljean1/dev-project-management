@@ -78,21 +78,21 @@ function LifePath ( props ) {
         "description":0
     })
     return (
-        <div className="basis-1/2 p-8">
+        <div className="basis-1/2 p-12 pl-15">
             {props.projectData.map((name, index) => (
                 <div key={index} className="pb-4">
                 
                 <div className="flex items-center gap-5 relative">
                     <div className="flex flex-col">
                         
-                    <FontAwesomeIcon icon={(name.status) ? faCheckCircle : faClock} style={{color: "white", fontSize: "32px", backgroundColor: (name.status) ? "#9ccd93" : "#9eb4d7"}} className="p-2 px-1 rounded-full border-2 border-slate-100"></FontAwesomeIcon>
+                    <FontAwesomeIcon icon={(name.status) ? faCheckCircle : faClock} style={{color: "white", fontSize: "32px", backgroundColor: (name.status) ? "#9ccd93" : "#9eb4d7"}} className="p-2 px-1 rounded-full border-2 border-slate-100 shadow transition-all duration-200"></FontAwesomeIcon>
                         <div className="flex h-full">
                             <div className="relative basis-1/2">
                                 <div className="absolute left-full top-[0px] border-slate-100 border border-0 border-l-2 h-30"></div>
                             </div>
                         </div>
                     </div>
-                    <div className="bg-slate-50 w-full border border-slate-400 p-4 rounded-lg">
+                    <div className="bg-slate-50 w-full border border-slate-300 shadow p-4 rounded-lg">
                         
                         <div className="flex justify-between">
                             {(editing.title == (index + 1)) ? <input type="text" className="border border-slate-400 border-2 bg-white rounded-lg p-1 px-2" autoFocus={true} aria-selected value={props.tempData} onChange={e => props.setTempData(e.target.value)} onKeyDown={e => {
@@ -113,7 +113,7 @@ function LifePath ( props ) {
                                 }
                             }}></input> : <p onClick={() => {setEditing(editingTitle(index)); props.setTempData(name.title)}} className="font-semibold">{name.title}</p>}
                             
-                            <div style={{backgroundColor: (name.status) ? "#b3eebf" : "#9eb4d7", color: (name.status) ? "#4f9f60" : ""}} className="text-xs p-1 h-min px-4 border border-slate-500 rounded-lg" onClick={() => {
+                            <div style={{backgroundColor: (name.status) ? "#b3eebf" : "#9eb4d7", color: (name.status) ? "#4f9f60" : ""}} className={`text-xs p-1 h-min px-4 border border-slate-200 rounded-lg shadow-lg cursor-pointer hover:brightness-90 active:outline-2 outline-offset-2 outline-blue-300 transition-all duration-200`} onClick={() => {
                                 let temp = props.projectData.slice()
                                 temp[index].status = !temp[index].status
                                 props.setProjectData(temp)
@@ -134,7 +134,7 @@ function LifePath ( props ) {
                                     default:
                                         break;
                                 }
-                            }}></textarea> : <p onClick={() => {setEditing(editingDescription(index)); setTempData(name.description)}}>{name.description}</p>}
+                            }}></textarea> : <p onClick={() => {setEditing(editingDescription(index)); props.setTempData(name.description)}}>{name.description}</p>}
                         <div className="flex items-center gap-2 pt-4">
                             <FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon>
                             <p className="">{(new Date(name.date)).toDateString()}</p>
@@ -144,7 +144,7 @@ function LifePath ( props ) {
                 </div>
                 </div>
                 ))}
-                <div className="flex items-center gap-2 p-2 pl-4 mt-8 text-slate-600 border border-slate-300 bg-slate-100 rounded-xl">
+                <div className="flex items-center gap-2 p-2 pl-4 mt-8 text-slate-600 cursor-pointer border border-slate-200 bg-slate-100 rounded-xl shadow hover:brightness-90 active:brightness-85 active:outline-2 outline-offset-2 outline-blue-300">
                     <FontAwesomeIcon icon={faBarsStaggered}></FontAwesomeIcon>
                     <p>fin du projet</p>
                 </div>
