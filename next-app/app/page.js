@@ -7,6 +7,7 @@ import {faClock, faPlus} from '@fortawesome/free-solid-svg-icons'
 import {faCircleCheck} from '@fortawesome/free-solid-svg-icons'
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 
 
 
@@ -18,8 +19,26 @@ export default function Home() {
       borderRadius: "10px",
       padding: "10px",
       boxShadow: "1px 1px 6px #00000041"
+    },
+    underlined: {
+      textDecoration: "none",
+      backgroundImage: "linear-gradient(indigo, indigo)",
+      backgroundSize: "50% 4px",
+      backgroundPosition: "0 90%",
+      backgroundRepeat: "no-repeat"
     }
   }
+
+  const underlined = (c, w) => ({
+    textDecoration: "none",
+      backgroundImage: `linear-gradient(${c}, ${c})`,
+      backgroundSize: `${(w) ? "100%" : "50%"} 3px`,
+      backgroundPosition: "0 100%",
+      backgroundRepeat: "no-repeat",
+      transition: "all 0.3s"
+  })
+
+  const [textHover, setTextHover] = useState([false, false, false, false, false])
 
   return (
 
@@ -28,7 +47,11 @@ export default function Home() {
 
       <BaseLayout>
       
-      <div className="p-10 pb-0 text-[64px] text-[#4e6e79] font-semibold flex"><p className="underline decoration-teal-500 decoration-5">Welcom</p>e back</div>
+      <div className="p-10 pb-0 text-[64px] text-[#4e6e79] font-semibold">
+        <div className="w-min text-nowrap flex" style={underlined("oklch(77.7% 0.152 181.912)", textHover[4])} onMouseOver={() => setTextHover([false, false, false, false, true])} onMouseLeave={() => setTextHover([false, false, false, false, false])}>
+          Welcome back
+        </div>
+      </div>
         <div className="p-10 flex flex-col gap-5">
           <div className="bg-slate-50 rounded-xl shadow-lg p-6">
             <p className="text-2xl pb-2 font-bold">Activitées</p>
@@ -89,7 +112,7 @@ export default function Home() {
                 <img src="/socials/github.png"></img>
               </a>
               <div className="p-3">
-                <p className="font-bold text-2xl flex"><p className="underline decoration-indigo-500 decoration-2">Git</p>Hub</p>
+                <a href="https://www.github.com" target="_blank" className="w-min font-bold text-2xl flex cursor-pointer" style={underlined("oklch(58.5% 0.233 277.117)", textHover[0])} onMouseOver={() => setTextHover([true, false, false, false, false])} onMouseLeave={() => setTextHover([false, false, false, false, false])}>GitHub</a>
                 <p className="text-lg leading-none pt-2 text-slate-600">Gestion des projets et codes sources</p>
               </div>
               
@@ -99,7 +122,7 @@ export default function Home() {
                 <img src="/socials/linkedin.png" ></img>
               </a>
               <div className="p-3">
-                <p className="overflow-auto font-bold text-2xl flex"><p className="underline decoration-sky-500 decoration-2">Link</p>edin</p>
+                <a href="https://www.linkedin.com" target="_blank" className="w-min overflow-auto font-bold text-2xl flex cursor-pointer" style={underlined("rgb(59,	155,	237)", textHover[1])} onMouseOver={() => setTextHover([false, true, false, false, false])} onMouseLeave={() => setTextHover([false, false, false, false, false])}>Linkedin</a>
                 <p className="text-lg leading-none pt-2 text-slate-600">Gestion des projets et codes sources</p>
               </div>
               
@@ -109,7 +132,7 @@ export default function Home() {
                 <img src="/socials/dev.png"></img>
               </a>
               <div className="p-3">
-                <p className="overflow-auto font-bold text-2xl"><p className="underline decoration-pink-500 decoration-2">Dev</p></p>
+                <a href="https://www.dev.to" target="_blank" className="w-min overflow-auto font-bold text-2xl cursor-pointer" style={underlined("oklch(72.3% 0.219 149.579)", textHover[2])} onMouseOver={() => setTextHover([false, false, true, false, false])} onMouseLeave={() => setTextHover([false, false, false, false, false])}>Dev</a>
                 <p className="text-lg leading-none pt-2 text-slate-600">Gestion des projets et codes sources</p>
               </div>
             </div>
@@ -118,14 +141,15 @@ export default function Home() {
                 <img src="/socials/reddit.png"></img>
               </a>
               <div className="p-3">
-                <p className="overflow-auto font-bold text-2xl flex"><p className="underline decoration-green-500 decoration-2">Redd</p>it</p>
+                <a href="https://www.reddit.com" target="_blank" className="w-min overflow-auto font-bold text-2xl flex cursor-pointer" style={underlined("oklch(70.5% 0.213 47.604)", textHover[3])} onMouseOver={() => setTextHover([false, false, false, true, false])} onMouseLeave={() => setTextHover([false, false, false, false, false])}>Reddit</a>
                 <p className="text-lg leading-none pt-2 text-slate-600">Gestion des projets et codes sources</p>
               </div>
             </div>
           </div>
-          <div style={styles.box} className="w-32 justify-center flex">
-            <FontAwesomeIcon icon={faPlus} />
-          </div>
+            <button className="bg-slate-50 shadow hover:bg-slate-100 h-full rounded-lg w-32 p-2 outline-offset-2 outline-blue-400 active:outline-2 active:bg-sky-100">
+              <FontAwesomeIcon className="text-slate-500" icon={faPlus} />
+              
+            </button>
         </div>
       </BaseLayout>
     </div>
