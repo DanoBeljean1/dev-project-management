@@ -134,7 +134,7 @@ function LifePath ( props ) {
                                     default:
                                         break;
                                 }
-                            }}></textarea> : <p onClick={() => {setEditing(editingDescription(index)); setTempData(name.description)}}>{name.description}</p>}
+                            }}></textarea> : <p onClick={() => {setEditing(editingDescription(index)); props.setTempData(name.description)}}>{name.description}</p>}
                         <div className="flex items-center gap-2 pt-4">
                             <FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon>
                             <p className="">{(new Date(name.date)).toDateString()}</p>
