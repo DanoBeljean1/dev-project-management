@@ -213,7 +213,7 @@ function RoadMap ( {projectRoadMap, setProjectRoadMap, currentView} ) {
                             
                             {value.child.map((child, ind) => (
 
-                                <div key={ind} className={`${(toggleAccordeon[index]) ? "block" : "hidden"} transition-all duration-300`}>
+                                <div key={ind} className={`${(toggleAccordeon[index]) ? "max-h-96 opacity-100" : "max-h-0 opacity-0"} transition-all duration-300`}>
                                     <p className="text-xl pt-3">{child.name}</p>
                                     <textarea ref={addToRefs} className={`textarea overflow-y-auto pl-4 border-l-2 border-slate-500 w-full bg-white`} style={{height: "25px", resize: "none"}} value={child.value} onChange={(e) => {
                                     
