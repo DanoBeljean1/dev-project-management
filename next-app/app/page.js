@@ -17,7 +17,7 @@ export default function Home() {
       backgroundColor: "white",
       borderRadius: "10px",
       padding: "10px",
-      border: "1px solid rgb(177, 187, 196)"
+      boxShadow: "1px 1px 6px #00000041"
     }
   }
 
@@ -28,48 +28,52 @@ export default function Home() {
 
       <BaseLayout>
       
-        <div className="">
-          <div className="flex p-8 gap-8">
-            
-            <div style={styles.box} className="basis-1/3">Tracker d'activités</div>
-            <div style={styles.box} className="basis-2/3">Activités récentes</div>
+      <p className="p-10 pb-0 text-[64px] text-[#5f7f8b] font-semibold">Welcome back</p>
+        <div className="p-10 flex flex-col gap-5">
+          <div className="bg-slate-50 rounded-xl shadow-lg p-6">
+            <p className="text-2xl pb-2 font-bold">Activitées</p>
+            <div className="flex gap-6">
+              
+              <div style={styles.box} className="basis-1/3">Tracker d'activités</div>
+              <div style={styles.box} className="basis-2/3">Activités récentes</div>
+            </div>
           </div>
-          <div className="p-8">
-          <div style={styles.box} className=" flex gap-5">
+          
+          <div className="bg-slate-50 rounded-xl shadow-lg p-6">
+            <p className="text-2xl pb-2 font-bold">Projets</p>
+          <div className="flex gap-5 ">
             
-            <div className="basis-1/2 flex gap-10">
+            <div className="basis-1/2 flex gap-5">
             
-              <div className="basis-1/2 flex justify-center gap-6">
+              <div style={styles.box} className="basis-1/2 flex gap-6 shadow">
                 <div className="h-full flex flex-col justify-center">
                 <FontAwesomeIcon
                 icon={faCircleCheck}
-                style={{ fontSize: 36, color: "white", width: 36, height: 36, backgroundColor: "rgb(91, 175, 105)", padding: "10px", border: "0px solid grey", borderRadius: "10px" }}
+                style={{ fontSize: 24, color: "white", width: 24, height: 24, backgroundColor: "rgb(141, 214, 153)", padding: "10px", border: "0px solid grey", borderRadius: "10px" }}
               />
                 </div>
-            
 
-
-                <div className="flex flex-col justify-center">
+              <div className="flex flex-col justify-center">
                   <p className="text-nowrap">Projets terminés</p>
-                  <p className="text-4xl flex justify-center">5</p>
+                  <p className="text-3xl">5</p>
                 </div>
               </div>
-              <div className="basis-1/2 flex justify-center gap-6">
+              <div style={styles.box} className="basis-1/2 flex gap-6">
               <div className="h-full flex flex-col justify-center">
                 <FontAwesomeIcon
                 icon={faClock}
-                style={{ fontSize: 36, color: "white", width: 36, height: 36, backgroundColor: "rgb(175, 189, 233)", padding: "10px", border: "0px solid grey", borderRadius: "10px" }}
+                style={{ fontSize: 24, color: "white", width: 24, height: 24, backgroundColor: "rgb(175, 189, 233)", padding: "10px", border: "0px solid grey", borderRadius: "10px" }}
               />
               </div>
                 <div className="flex flex-col justify-center">
                   <p className="text-nowrap">Projets en cours</p>
-                  <p className="text-4xl flex justify-center">5</p>
+                  <p className="text-3xl">5</p>
                 </div>
               </div>
             </div>
-            <div className="basis-1/2 flex">
+            <div style={styles.box} className="basis-1/2 flex">
               <p className="">Projet récent</p>
-              <div className="bg-slate-200 w-full m-3 h-min border border-gray-400 rounded-lg flex justify-between p-2">
+              <div className="bg-slate-50 w-full m-3 h-min border border-gray-400 rounded-lg flex justify-between p-2">
                 <div>projet</div>
                 <button className="h-[24px]" onClick={() => {}}>
                   <FontAwesomeIcon icon={faEllipsisV} style={{ fontSize: 24, color: "grey", width: 24, height: 24}} />
@@ -78,94 +82,35 @@ export default function Home() {
             </div>
           </div>
           </div>
-          <div className="p-8 gap-8 flex flex-wrap">
-            <div style={styles.box} className="w-64 h-48">
-              <a href="https://www.github.com" target="_blank" className="w-full h-28 flex justify-center">
+          <div className="bg-slate-50 rounded-xl shadow-lg p-6 gap-8 flex flex-wrap">
+            <p className="text-2xl w-full -mb-6 font-bold">Liens utiles</p>
+            <div style={styles.box} className="w-96 flex">
+              <a href="https://www.github.com" target="_blank" className="basis-1/3">
                 <img src="/socials/github.png"></img>
               </a>
-              <p className="p-3 overflow-auto">GitHub</p>
+              <p className="p-3 overflow-auto font-bold text-2xl">GitHub</p>
             </div>
-            <div style={styles.box} className="w-64 h-48">
-              <a href="https://www.linkedin.com" target="_blank" className="w-full h-28 flex justify-center">
+            <div style={styles.box} className="w-96 flex">
+              <a href="https://www.linkedin.com" target="_blank" className="basis-1/3">
                 <img src="/socials/linkedin.png" ></img>
               </a>
-              <p className="p-3 overflow-auto">Linkedin</p>
+              <p className="p-3 overflow-auto font-bold text-2xl">Linkedin</p>
             </div>
-            <div style={styles.box} className="w-64 h-48">
-              <a href="https://www.dev.to" target="_blank" className="w-full h-28 flex justify-center">
+            <div style={styles.box} className="w-96 flex">
+              <a href="https://www.dev.to" target="_blank" className="basis-1/3">
                 <img src="/socials/dev.png"></img>
               </a>
-              <p className="p-3 overflow-auto">Dev</p>
+              <p className="p-3 overflow-auto font-bold text-2xl">Dev</p>
             </div>
-            <div style={styles.box} className="w-64 h-48">
-              <a href="https://www.reddit.com" target="_blank" className="w-full h-28 flex justify-center">
+            <div style={styles.box} className="w-96 flex">
+              <a href="https://www.reddit.com" target="_blank" className="basis-1/3">
                 <img src="/socials/reddit.png"></img>
               </a>
-              <p className="p-3 overflow-auto">Reddit</p>
+              <p className="p-3 overflow-auto font-bold text-2xl">Reddit</p>
             </div>
           </div>
         </div>
       </BaseLayout>
     </div>
-    /*
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>*/
   );
 }
