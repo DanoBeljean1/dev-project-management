@@ -207,7 +207,7 @@ function RoadMap ( {projectRoadMap, setProjectRoadMap, currentView} ) {
                                     temp[index] = !temp[index]
                                     setToggleAccordeon(temp)
                                 }}><FontAwesomeIcon icon={(toggleAccordeon[index]) ? faAngleDown : faAngleRight}></FontAwesomeIcon></button><p className="text-2xl font-bold">{value.parent}</p></div>
-                                   { (index == showSaveButton) ? <button onClick={() => sendData()} className="bg-blue-300 px-2 rounded-lg cursor-pointer border-1 border-blue-400 hover:bg-blue-400 active:bg-blue-200">save all</button>
+                                   { (index == showSaveButton) ? <button onClick={() => sendData()} className="bg-blue-300 px-2 rounded-lg cursor-pointer border-1 border-blue-400 hover:bg-blue-400 shadow active:bg-blue-200">save all</button>
                              : <div></div>
                                 }</div>
                             

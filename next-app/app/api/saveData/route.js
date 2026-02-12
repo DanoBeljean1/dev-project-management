@@ -17,6 +17,82 @@ export async function POST(request) {
             const name = `projects.${data.name}.lifepath`
             const prjName = `projects.${data.name}`
             const rdName = `projects.${data.name}.roadmap`
+            const createRdmap = [{
+          "parent": "Informations principales",
+          "child": [
+            {
+              "name": "Description",
+              "value": ""
+            },
+            {
+              "name": "Objectif principal",
+              "value": ""
+            },
+            {
+              "name": "Publique cible",
+              "value": ""
+            },
+            {
+              "name": "Niveau de difficulté",
+              "value": ""
+            }
+          ]
+        },
+        {
+          "parent": "Problématique et idées",
+          "child": [
+            {
+              "name": "Valeur ajoutée du projet",
+              "value": ""
+            },
+            {
+              "name": "Technologies apprises durant le projet",
+              "value": ""
+            },
+            {
+              "name": "Fonctionnalitées clés",
+              "value": ""
+            },
+            {
+              "name": "Fonctionnalitées secondaires",
+              "value": ""
+            }
+          ]
+        },
+        {
+          "parent": "Technologies",
+          "child": [
+            {
+              "name": "Frontend",
+              "value": ""
+            },
+            {
+              "name": "Backend",
+              "value": ""
+            },
+            {
+              "name": "Base de données",
+              "value": ""
+            }
+          ]
+        },
+        {
+          "parent": "Déploiement et évolutions futures",
+          "child": [
+            {
+              "name": "Hébergement",
+              "value": ""
+            },
+            {
+              "name": "Nom de domaine",
+              "value": ""
+            },
+            {
+              "name": "Évolutions futures",
+              "value": ""
+            }
+                                    ]}]
+
             switch (data.action) {
 
                 case "update":
@@ -25,6 +101,7 @@ export async function POST(request) {
                     break;
                 case "create":
                     await collection.updateOne({user: "dano"}, {$set: {[name]: data.data}})
+                    await collection.updateOne({user: "dano"}, {$set: {[rdName]: createRdmap}})
                     break;
                 case "addpath":
                     await collection.updateOne({user: "dano"}, {$set: {[name]: data.data}})
@@ -45,5 +122,3 @@ export async function POST(request) {
             await client.close();
         }
 }
-
-
