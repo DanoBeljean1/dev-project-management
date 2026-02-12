@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useParams, usePathname } from "next/navigation"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faArrowTurnDown, faAngleRight, faWindowMinimize, faWindowMaximize, faFolder, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faArrowTurnDown, faAngleRight, faWindowMinimize, faWindowMaximize, faFolder, faTrash, faWindowRestore, faCaretRight, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import {capitalize} from "src/capitalize"
 import { useEffect } from "react";
 
@@ -21,9 +21,8 @@ export function CurrentPath() {
     const projectId = useParams().projectId
 
     const styles = {
-        color: "blue",
-        textDecoration: "underline"
-    }
+        color: "oklch(70.7% 0.165 254.624)"
+        }
 
     return (
         <div className="flex justify-between">
@@ -79,7 +78,7 @@ function Route () {
         <div className="flex flex-col text-xl gap-1 " >
             <Link style={navigation("/")} onClick={() => setCurrentLoc("/")} href="/">Dashboards</Link>
             <Link style={navigation("technologies")} onClick={() => setCurrentLoc("technologies")} href="/routes/technologies">Technologies</Link>
-            <Link style={navigation("project")} className="w-64" onClick={() => {}} href="/routes/project"><div className="flex justify-between">All Projects<div className="flex flex-col justify-center"><FontAwesomeIcon icon={(allData.length == 0) ? faAngleRight : faAngleDown} style={{color: "grey"}}></FontAwesomeIcon></div></div></Link>
+            <Link style={navigation("project")} className="w-64" onClick={() => {}} href="/routes/project"><div className="flex justify-between">All Projects<div className="flex flex-col justify-center"><FontAwesomeIcon icon={(allData.length == 0) ? faCaretRight : faCaretDown} style={{color: "grey"}}></FontAwesomeIcon></div></div></Link>
             <div style={{paddingLeft: "30px"}}>
                 {allData.map((name) => (
                     <a href={"project/"+name} key={name} className="flex items-center gap-4">
@@ -141,14 +140,17 @@ function LeftPanel ( {open} ) {
 }
 
 function TopPanel ( {sideBarOpen, setSideBarOpen, projectData, setProjectData} ) {
-    const pathname = usePathname().split("/")
+    let pathname = usePathname().split("/")
+    if (pathname.length == 2) {
+        pathname[1] = "Dashboard"
+    }
     return (
         <div className="flex-1">
             <div className="bg-slate-100 flex justify-between items-center p-4">
                 <div className="flex items-center gap-5">
-                    <button onClick={() => setSideBarOpen(!sideBarOpen)}><FontAwesomeIcon icon={faWindowMaximize} style={{transform: "scaleX(-1)", fontSize: "24px"}}></FontAwesomeIcon></button>
+                    <button onClick={() => setSideBarOpen(!sideBarOpen)}><FontAwesomeIcon className="text-slate-500 cursor-pointer" icon={faWindowRestore} style={{transform: "scaleX(-1)", fontSize: "28px"}}></FontAwesomeIcon></button>
                     
-                    <p className="text-4xl">{capitalize(pathname[pathname.length - 1].replace("_", " "))}</p>
+                    <p className="text-4xl font-bold text-slate-600 pl-6">{capitalize(pathname[pathname.length - 1].replace("_", " "))}</p>
                 </div>
                 
                 <TopPanelAction projectData={projectData} setProjectData={setProjectData}></TopPanelAction>
