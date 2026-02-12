@@ -1,12 +1,14 @@
 'use client'
 
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useParams, usePathname } from "next/navigation"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faArrowTurnDown, faAngleRight, faWindowMinimize, faWindowMaximize, faFolder, faTrash, faWindowRestore, faCaretRight, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import {capitalize} from "src/capitalize"
 import { useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 
 /*
@@ -45,15 +47,17 @@ function Route () {
     const [currentLoc, setCurrentLoc] = useState('')
     const pathname = usePathname()
     const [allData, setAllData] = useState([])
+    const [loading, setLoading] = useState(null)
 
     const fetchData = async () => {
+        setLoading(true)
         const response = await fetch("/api/getAllData");
 
         if (response.ok) {
             const data = await response.json()
             const names = Object.keys(data[0].projects);
             setAllData(names);
-
+            setLoading(false)
         }
         else {
             console.log("Error while fetching data.")
@@ -80,12 +84,14 @@ function Route () {
             <Link style={navigation("technologies")} onClick={() => setCurrentLoc("technologies")} href="/routes/technologies">Technologies</Link>
             <Link style={navigation("project")} className="w-64" onClick={() => {}} href="/routes/project"><div className="flex justify-between">All Projects<div className="flex flex-col justify-center"><FontAwesomeIcon icon={(allData.length == 0) ? faCaretRight : faCaretDown} style={{color: "grey"}}></FontAwesomeIcon></div></div></Link>
             <div style={{paddingLeft: "30px"}}>
-                {allData.map((name) => (
+                {(loading) ? <Skeleton count={3} /> : allData.map((name) => (
                     <a href={"project/"+name} key={name} className="flex items-center gap-4">
                     <FontAwesomeIcon className="p-auto" style={{transform: "", color: "rgba(0, 0, 0, 0.25)"}} icon={faFolder}></FontAwesomeIcon>
                         <p>{name}</p>
                         </a>
                     ))}
+                    
+                
             </div>
             
             <Link style={navigation("execute")} onClick={() => setCurrentLoc("execute")} href="/routes/execute">Execute</Link>
