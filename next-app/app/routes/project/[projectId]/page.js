@@ -82,7 +82,7 @@ function LifePath ( props ) {
             {props.projectData.map((name, index) => (
                 <div key={index} className="pb-4">
                 
-                <div className="flex items-center gap-5 relative">
+                <div className="flex items-center gap-2 relative">
                     <div className="flex flex-col">
                         
                     <FontAwesomeIcon icon={(name.status) ? faCheckCircle : faClock} style={{color: "white", fontSize: "32px", backgroundColor: (name.status) ? "#9ccd93" : "#9eb4d7"}} className="p-2 px-1 rounded-full border-2 border-slate-100 shadow transition-all duration-200"></FontAwesomeIcon>
@@ -92,7 +92,7 @@ function LifePath ( props ) {
                             </div>
                         </div>
                     </div>
-                    <div className="bg-slate-50 w-full border border-slate-300 shadow p-4 rounded-lg">
+                    <div className="bg-slate-50 w-full border border-slate-300 shadow p-4 pl-5 rounded-lg hover:brightness-95">
                         
                         <div className="flex justify-between">
                             {(editing.title == (index + 1)) ? <input type="text" className="border border-slate-400 border-2 bg-white rounded-lg p-1 px-2" autoFocus={true} aria-selected value={props.tempData} onChange={e => props.setTempData(e.target.value)} onKeyDown={e => {
@@ -135,9 +135,9 @@ function LifePath ( props ) {
                                         break;
                                 }
                             }}></textarea> : <p onClick={() => {setEditing(editingDescription(index)); props.setTempData(name.description)}}>{name.description}</p>}
-                        <div className="flex items-center gap-2 pt-4">
+                        <div className="flex items-center gap-2 pt-4 text-(--color-slate-500)">
                             <FontAwesomeIcon icon={faCalendar}></FontAwesomeIcon>
-                            <p className="">{(new Date(name.date)).toDateString()}</p>
+                            <p className="text-(--color-slate-500)">{(new Date(name.date)).toDateString()}</p>
                         </div>
                         </div>
                         
@@ -267,9 +267,9 @@ export default function ProjectDetails () {
 
                     <div className="absolute bottom-10 w-full flex justify-center pb-10">
                     <div className="bg-white shadow fixed flex rounded-full overflow-hidden">
-                        <button onClick={() => setCurrentView("lifepath")} className="p-2 m-2 rounded-full hover:bg-blue-300 hover:cursor-pointer">Life path</button>
-                        <button onClick={() => setCurrentView("roadmap")} className="p-2 m-2 rounded-full hover:bg-blue-300 hover:cursor-pointer">Roadmap</button>
-                        <button className="p-2 m-2 rounded-full hover:bg-blue-300 hover:cursor-pointer">View</button>
+                        <button onClick={() => setCurrentView("lifepath")} className={`p-2 m-2 ${(currentView == "lifepath") ? "shadow-lg" : ""} rounded-full hover:bg-blue-300 cursor-pointer active:brightness-85 active:outline-2 outline-offset-2 outline-blue-300`}>Life path</button>
+                        <button onClick={() => setCurrentView("roadmap")} className={`p-2 m-2 ${(currentView == "roadmap") ? "shadow-lg" : ""} rounded-full hover:bg-blue-300 cursor-pointer active:brightness-85 active:outline-2 outline-offset-2 outline-blue-300`}>Roadmap</button>
+                        <button onClick={() => setCurrentView("view")} className={`p-2 m-2 rounded-full hover:bg-blue-300 ${(currentView == "view") ? "shadow-lg" : ""} cursor-pointer active:brightness-85 active:outline-2 outline-offset-2 outline-blue-300`}>View</button>
                     </div>
                 </div>
                 </div>
