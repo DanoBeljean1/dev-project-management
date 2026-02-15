@@ -18,7 +18,30 @@ function LifePath ( props ) {
     const projectId = useParams().projectId
     const [allData, setAllData] = useState([])
     const [showCommentSection, setShowCommentSection] = useState(true)
+    const [displayedTags, setDisplayedTags] = useState([])
+    const [comments, setComments] = useState([])
+    const [currentComment, setCurrentComment] = useState("")
+    const [tagHover, setTagHover] = useState(1)
 
+    let tags = ["important", "amélioration", "explorer", "revoir", "frontend", "backend", "bug"]
+    const tagsColors = ["orange", "amber", "yellow", "lime", "indigo", "blue", "slate", "red", "emerauld", "teal", "cyan", "sky"]
+
+    const colorMap = {
+        orange: "bg-orange-500",
+        
+        yellow: "bg-yellow-500",
+        lime: "bg-lime-500",
+        indigo: "bg-indigo-500",
+        emerauld: "bg-emerald-500",
+        blue: "bg-blue-500",
+        slate: "bg-slate-500",
+        red: "bg-red-500",
+        
+        teal: "bg-teal-500",
+        amber: "bg-amber-500",
+        cyan: "bg-cyan-500",
+        sky: "bg-sky-500",
+}
 
     const fetchData = async () => {
             const response = await fetch("/api/getAllData");
@@ -77,8 +100,9 @@ function LifePath ( props ) {
         "title":0,
         "description":0
     })
+
     return (
-        <div className="flex w-full">
+        <div className="flex w-full select-none">
         <div className={`${(showCommentSection) ? "basis-1/2" : "basis-full"} transition-all duration-200 p-12 pl-15`}>
             {props.projectData.map((name, index) => (
                 <div key={index} className="pb-4">
@@ -119,7 +143,7 @@ function LifePath ( props ) {
                                 temp[index].status = !temp[index].status
                                 props.setProjectData(temp)
                             }}>{(name.status) ? "Terminé" : "Actuel"}</div></div>
-                        {(editing.description == (index + 1)) ? <textarea type="text" className="w-full border border-slate-400 border-2 bg-white rounded-lg p-1 px-2" autoFocus={true} aria-selected value={props.tempData} onChange={e => props.setTempData(e.target.value)} onKeyDown={e => {
+                        {(editing.description == (index + 1)) ? <textarea type="text" className="w-full border border-slate-400 border-2 bg-white rounded-lg p-1 px-2" autoFocus={true} value={props.tempData} onChange={e => props.setTempData(e.target.value)} onKeyDown={e => {
                                 switch (e.key) {
                                     case "Enter":
                                         setEditing(defaultEditing)
@@ -163,7 +187,49 @@ function LifePath ( props ) {
                     </button>
                 </div>
                 {
-                    (showCommentSection) && <div className="p-4"></div>
+                    (showCommentSection) && <div className="pl-8 p-6 flex flex-col h-[calc(100%-56px)] min-h-0">
+                        <div className="h-28 flex flex-col">
+                            <textarea className="basis-2/3 w-full border-1 border-slate-500 rounded-xs" value={currentComment} onChange={(e) => setCurrentComment(e.target.value)}></textarea>
+                            <div className="basis-1/3 flex justify-between pt-2 items-center">
+                                <div className="flex w-80 overflow-x-scroll gap-1 [&::-webkit-scrollbar]:hidden 
+            [-ms-overflow-style:none]
+            [scrollbar-width:none]" onWheel={(e) => {
+                                    console.log("scoll")
+                                    e.currentTarget.scrollLeft += e.deltaY
+                                }}>
+                                    {tags.map((tag, index) => (
+                                        <div key={index} className={`${(displayedTags[index]) ? `${colorMap[tagsColors.sort()[index]]} border-slate-50` : "bg-slate-50 border-indigo-400"} items-center flex border-2 cursor-pointer transition-all duration-100 px-3 rounded-full`} onClick={() => {
+                                            let temp = displayedTags.slice()
+                                            temp[index] = !temp[index]
+                                            setDisplayedTags(temp)
+                                        }}>{tag}</div>
+                                    ))}
+                                </div>
+                                <button className="bg-blue-200 px-3 rounded-lg shadow border-1 cursor-pointer border-blue-300 hover:bg-blue-300 active:bg-blue-400 active:outline-2 outline-blue-400 outline-offset-2" onClick={(e) => {
+                                    let temp = comments.slice()
+                                    temp.push({texte: currentComment, tags: displayedTags, date: new Date()})
+                                    console.log(temp)
+                                    setComments(temp)
+                                    setCurrentComment("")
+                                }}>publier</button>
+                            </div>
+                        </div>
+                        <div className="pt-5 flex-1 min-h-0 overflow-y-auto flex flex-col gap-3">
+                            {comments.map((comment, index) => (
+                                <div key={index} className="pl-2 border-l-2 border-blue-400 flex justify-between">
+                                    <div>
+                                        {comment.texte}
+                                        <p className="text-slate-400 italic text-xs">{`${comment.date.getDate()}.${comment.date.getMonth()}.${comment.date.getFullYear()}  ${comment.date.getHours()}:${comment.date.getMinutes()}`}</p>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        {comment.tags.map((tag, ind) => (
+                                            <div name={ind} key={ind} className={`${colorMap[tagsColors.sort()[ind]]} p-2 rounded-full transition-all duration-500`} style={{ maxWidth: (tagHover==ind) ? "500px" : "0px" }} onMouseOver={() => setTagHover(ind)} onMouseLeave={() => {setTagHover(null); console.log(tagHover)}}>{(tagHover==ind) && tag}  </div>
+                                        ))}
+                                    </div>
+                                    </div>
+                            ))}
+                        </div>
+                    </div>
                 }
             
         </div>
