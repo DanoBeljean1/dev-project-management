@@ -172,7 +172,7 @@ export default function BaseLayout ( {children, projectData, setProjectData} ) {
     
 
     return (
-        <div className="flex h-screen w-full fixed">
+        <div className="flex h-screen w-full fixed select-none">
             
             <LeftPanel className="h-full" open={sideBarOpen}/>
             <div className="flex flex-col w-full" style={{boxShadow: "inset 8px 0 10px -5px rgba(0, 0, 0, 0.2)"}}>

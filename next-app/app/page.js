@@ -28,7 +28,7 @@ export default function Home() {
 
       <BaseLayout>
       
-        <div className="">
+        <div className="select-none">
           <div className="flex p-8 gap-8">
             
             <div style={styles.box} className="basis-1/3">Tracker d'activités</div>
