@@ -6,11 +6,12 @@ import { useState } from "react"
 import { useEffect } from "react"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCheckCircle, faClose } from "@fortawesome/free-solid-svg-icons"
+import { faCheckCircle, faClose, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { faClock } from "@fortawesome/free-solid-svg-icons"
 import { faCalendar } from "@fortawesome/free-solid-svg-icons"
 import { faBarsStaggered } from "@fortawesome/free-solid-svg-icons"
 import { useRef } from "react"
+import  {formatDate} from "src/date"
 
 
 function LifePath ( props ) {
@@ -22,6 +23,7 @@ function LifePath ( props ) {
     const [comments, setComments] = useState([])
     const [currentComment, setCurrentComment] = useState("")
     const [tagHover, setTagHover] = useState(1)
+    const [deleteComment, setDeleteComment] = useState(null)
 
     let tags = ["important", "amélioration", "explorer", "revoir", "frontend", "backend", "bug"]
     const tagsColors = ["orange", "amber", "yellow", "lime", "indigo", "blue", "slate", "red", "emerauld", "teal", "cyan", "sky"]
@@ -56,8 +58,11 @@ function LifePath ( props ) {
                 setAllData(names);
                 props.setProjectData(data[0].projects[projectId].lifepath)
                 props.setProjectRoadMap(data[0].projects[projectId].roadmap)
+                setComments(data[0].projects[projectId].comments)
+
                 console.log("rdmp, ", data[0].projects[projectId].roadmap)
                 console.log("projectdata, ", data[0].projects[projectId].lifepath)
+                console.log(data[0].projects[projectId].comments)
                   
             }
             else {
@@ -76,6 +81,31 @@ function LifePath ( props ) {
                 "name":projectId,
                 "data":props.projectData,
                 "action":"update"
+            }
+        )})
+        .then((res) => console.log(res.json()))
+    }
+
+    const sendComment = async (del) => {
+
+        let temp = comments.slice()
+        if (del>0) {
+            temp.splice(del-1, 1)
+            
+        }
+        else {
+            temp.push({texte: currentComment, tags: displayedTags, date: new Date()})
+        }
+        
+
+        setComments(temp)
+        setCurrentComment("")
+
+        await fetch("/api/saveData", {method: "POST", body: JSON.stringify(
+            {
+                "name":projectId,
+                "data":temp,
+                "action":"comment"
             }
         )})
         .then((res) => console.log(res.json()))
@@ -175,21 +205,21 @@ function LifePath ( props ) {
                 </div>
                 
         </div>
-        <div className={`${(showCommentSection) ? "basis-1/2" : "basis-1 hover:brightness-95 active:brightness-90"} transition-all duration-200 bg-slate-50 h-full w-full`} onClick={() => {
+        <div className={`${(showCommentSection) ? "basis-1/2" : "basis-1 hover:brightness-95 active:brightness-90"} shadow-xl transition-all duration-200 bg-slate-50 h-full w-full`} onClick={() => {
             if (!showCommentSection) {
                 setShowCommentSection(true)
             }
         }}>
                 <div className={`w-full h-14 flex justify-between text-slate-600 p-2 bg-slate-100`}>
                     <div className={`text-2xl flex items-end font-bold`}>{(showCommentSection) ? <p className="pl-10">Comment Section</p> : ""} </div>
-                    <button className="p-1 rounded-lg hover:bg-slate-200 active:bg-slate-300" onClick={() => setShowCommentSection(false)}>
+                    <button className="p-1 rounded-lg hover:bg-slate-200 active:bg-slate-300 cursor-pointer" onClick={() => setShowCommentSection(false)}>
                             <FontAwesomeIcon className="transition-all duration-200" style={{transform: (showCommentSection) ? "" : "rotate(45deg)"}} icon={faClose}></FontAwesomeIcon>
                     </button>
                 </div>
                 {
                     (showCommentSection) && <div className="pl-8 p-6 flex flex-col h-[calc(100%-56px)] min-h-0">
                         <div className="h-28 flex flex-col">
-                            <textarea className="basis-2/3 w-full border-1 border-slate-500 rounded-xs" value={currentComment} onChange={(e) => setCurrentComment(e.target.value)}></textarea>
+                            <textarea className="basis-2/3 w-full border-1 border-slate-500 rounded-xs bg-white" value={currentComment} onChange={(e) => setCurrentComment(e.target.value)}></textarea>
                             <div className="basis-1/3 flex justify-between pt-2 items-center">
                                 <div className="flex w-80 overflow-x-scroll gap-1 [&::-webkit-scrollbar]:hidden 
             [-ms-overflow-style:none]
@@ -206,28 +236,32 @@ function LifePath ( props ) {
                                     ))}
                                 </div>
                                 <button className="bg-blue-200 px-3 rounded-lg shadow border-1 cursor-pointer border-blue-300 hover:bg-blue-300 active:bg-blue-400 active:outline-2 outline-blue-400 outline-offset-2" onClick={(e) => {
-                                    let temp = comments.slice()
-                                    temp.push({texte: currentComment, tags: displayedTags, date: new Date()})
-                                    console.log(temp)
-                                    setComments(temp)
-                                    setCurrentComment("")
+                                    sendComment(0)
                                 }}>publier</button>
                             </div>
                         </div>
                         <div className="pt-5 flex-1 min-h-0 overflow-y-auto flex flex-col gap-3">
-                            {comments.map((comment, index) => (
-                                <div key={index} className="pl-2 border-l-2 border-blue-400 flex justify-between">
+                            {
+                            (comments.length>0) ? comments.map((comment, index) => (
+                                
+                                <div key={index} className="relative pl-2 border-l-2 border-blue-400 flex justify-between hover:bg-blue-200 cursor-pointer" onClick={() => setDeleteComment(index)} onMouseLeave={() => setDeleteComment(null)}>
                                     <div>
                                         {comment.texte}
-                                        <p className="text-slate-400 italic text-xs">{`${comment.date.getDate()}.${comment.date.getMonth()}.${comment.date.getFullYear()}  ${comment.date.getHours()}:${comment.date.getMinutes()}`}</p>
+                                        <p className="text-slate-400 italic text-xs">{formatDate(comment.date)}</p>
                                     </div>
                                     <div className="flex items-center gap-1">
                                         {comment.tags.map((tag, ind) => (
-                                            <div name={ind} key={ind} className={`${colorMap[tagsColors.sort()[ind]]} p-2 rounded-full transition-all duration-500`} style={{ maxWidth: (tagHover==ind) ? "500px" : "0px" }} onMouseOver={() => setTagHover(ind)} onMouseLeave={() => {setTagHover(null); console.log(tagHover)}}>{(tagHover==ind) && tag}  </div>
+                                            (tag) ? <div name={ind} key={ind} className={`${colorMap[tagsColors.sort()[ind]]} p-2 rounded-full transition-all duration-500`} style={{ maxWidth: (tagHover==ind) ? "500px" : "0px" }} onMouseOver={() => setTagHover(ind)} onMouseLeave={() => {setTagHover(null); console.log(tagHover)}}>{(tagHover==ind) && tag}  </div>
+ : <div key={ind}></div>
                                         ))}
                                     </div>
+                                    {(deleteComment==index) && <div className="absolute w-full h-full bg-red-400 left-0 flex items-center justify-center cursor-pointer hover:bg-red-500 active:bg-red-600 active:outline-2 outline-offset-2 outline-blue-400" onClick={() => sendComment(index+1)}>
+                                        <FontAwesomeIcon className="text-red-100" icon={faTrash}/>
+                                    </div>}
                                     </div>
-                            ))}
+                            )) : <div className="italic text-slate-400"><p>aucun commentaires pour l'instant</p>
+                            </div>
+                        }
                         </div>
                     </div>
                 }
