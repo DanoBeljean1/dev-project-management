@@ -224,7 +224,6 @@ function LifePath ( props ) {
                                 <div className="flex w-80 overflow-x-scroll gap-1 [&::-webkit-scrollbar]:hidden 
             [-ms-overflow-style:none]
             [scrollbar-width:none]" onWheel={(e) => {
-                                    console.log("scoll")
                                     e.currentTarget.scrollLeft += e.deltaY
                                 }}>
                                     {tags.map((tag, index) => (
@@ -235,6 +234,7 @@ function LifePath ( props ) {
                                         }}>{tag}</div>
                                     ))}
                                 </div>
+                                
                                 <button className="bg-blue-200 px-3 rounded-lg shadow border-1 cursor-pointer border-blue-300 hover:bg-blue-300 active:bg-blue-400 active:outline-2 outline-blue-400 outline-offset-2" onClick={(e) => {
                                     sendComment(0)
                                 }}>publier</button>
