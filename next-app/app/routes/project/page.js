@@ -53,7 +53,7 @@ export default function Project () {
 
             <div className="p-6">
                 <div className="flex gap-10">
-                    <button onClick={() => setShowDialogBox(true)} className="cursor-pointer bg-slate-50 hover:bg-slate-100 active:bg-white rounded-xl p-4">
+                    <button onClick={() => setShowDialogBox(true)} className="cursor-pointer bg-slate-50 hover:bg-slate-100 active:bg-white rounded-xl p-4 text-slate-700">
                         <FontAwesomeIcon icon={faPlusSquare} style={{fontSize: 128}}></FontAwesomeIcon>
                         <p className="text-xl pt-2">Créer un projet</p>
                     </button>
