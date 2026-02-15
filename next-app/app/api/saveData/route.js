@@ -17,6 +17,7 @@ export async function POST(request) {
             const name = `projects.${data.name}.lifepath`
             const prjName = `projects.${data.name}`
             const rdName = `projects.${data.name}.roadmap`
+            const cmtName = `projects.${data.name}.comments`
             const createRdmap = [{
           "parent": "Informations principales",
           "child": [
@@ -103,6 +104,7 @@ export async function POST(request) {
                 case "create":
                     await collection.updateOne({user: "dano"}, {$set: {[name]: data.data}})
                     await collection.updateOne({user: "dano"}, {$set: {[rdName]: createRdmap}})
+                    await collection.updateOne({user: "dano"}, {$set: {[cmtName]: data.data}})
                     break;
                 case "addpath":
                     await collection.updateOne({user: "dano"}, {$set: {[name]: data.data}})
