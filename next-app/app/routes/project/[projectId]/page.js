@@ -6,12 +6,11 @@ import { useState } from "react"
 import { useEffect } from "react"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons"
+import { faCheckCircle, faClose } from "@fortawesome/free-solid-svg-icons"
 import { faClock } from "@fortawesome/free-solid-svg-icons"
 import { faCalendar } from "@fortawesome/free-solid-svg-icons"
 import { faBarsStaggered } from "@fortawesome/free-solid-svg-icons"
 import { useRef } from "react"
-import { jsx } from "react/jsx-runtime"
 
 
 function LifePath ( props ) {
@@ -78,6 +77,7 @@ function LifePath ( props ) {
         "description":0
     })
     return (
+        <div className="flex w-full">
         <div className="basis-1/2 p-12 pl-15">
             {props.projectData.map((name, index) => (
                 <div key={index} className="pb-4">
@@ -149,6 +149,13 @@ function LifePath ( props ) {
                     <p>fin du projet</p>
                 </div>
                 
+        </div>
+        <div className="basis-1/2 bg-slate-50 h-full w-full">
+                <div className="w-full h-14 flex justify-between text-slate-600 p-2 bg-slate-100">
+                    <p className="text-2xl flex items-end font-bold pl-10">Comment section</p>
+                    <FontAwesomeIcon className="cursor-pointer " icon={faClose}/>
+                </div>
+        </div>
         </div>
     )
 }
