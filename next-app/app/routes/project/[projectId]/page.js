@@ -17,6 +17,7 @@ function LifePath ( props ) {
 
     const projectId = useParams().projectId
     const [allData, setAllData] = useState([])
+    const [showCommentSection, setShowCommentSection] = useState(true)
 
 
     const fetchData = async () => {
@@ -78,7 +79,7 @@ function LifePath ( props ) {
     })
     return (
         <div className="flex w-full">
-        <div className="basis-1/2 p-12 pl-15">
+        <div className={`${(showCommentSection) ? "basis-1/2" : "basis-full"} transition-all duration-200 p-12 pl-15`}>
             {props.projectData.map((name, index) => (
                 <div key={index} className="pb-4">
                 
@@ -150,11 +151,21 @@ function LifePath ( props ) {
                 </div>
                 
         </div>
-        <div className="basis-1/2 bg-slate-50 h-full w-full">
-                <div className="w-full h-14 flex justify-between text-slate-600 p-2 bg-slate-100">
-                    <p className="text-2xl flex items-end font-bold pl-10">Comment section</p>
-                    <FontAwesomeIcon className="cursor-pointer " icon={faClose}/>
+        <div className={`${(showCommentSection) ? "basis-1/2" : "basis-1 hover:brightness-95 active:brightness-90"} transition-all duration-200 bg-slate-50 h-full w-full`} onClick={() => {
+            if (!showCommentSection) {
+                setShowCommentSection(true)
+            }
+        }}>
+                <div className={`w-full h-14 flex justify-between text-slate-600 p-2 bg-slate-100`}>
+                    <div className={`text-2xl flex items-end font-bold`}>{(showCommentSection) ? <p className="pl-10">Comment Section</p> : ""} </div>
+                    <button className="p-1 rounded-lg hover:bg-slate-200 active:bg-slate-300" onClick={() => setShowCommentSection(false)}>
+                            <FontAwesomeIcon className="transition-all duration-200" style={{transform: (showCommentSection) ? "" : "rotate(45deg)"}} icon={faClose}></FontAwesomeIcon>
+                    </button>
                 </div>
+                {
+                    (showCommentSection) && <div className="p-4"></div>
+                }
+            
         </div>
         </div>
     )
